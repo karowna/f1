@@ -6,13 +6,14 @@ This project consists of a Python backend and a TypeScript/HTML frontend, each l
 
 Use Docker Compose to build and run the application:
 
-```bash
+```
 docker compose up --build
-
+```
 And to tear it down:
 
-```bash
+```
 docker compose down -v
+```
 
 Always use Incognito Mode when testing the frontend in your browser.
 Browsers cache compiled frontend code aggressively, which can lead to outdated behavior during development.
