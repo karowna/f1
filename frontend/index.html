@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frontend</title>
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>F1 Portal</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
 </head>
 <body>
-  <h1>Message from Backend:</h1>
-  <p id="message">Loading...</p>
+<header>
+    <div id="navbar">
+        <div id="logo">
+            <a href="#home">
+                <img src="./assets/logo.png" alt="F1 Logo" />
+            </a>
+        </div>
+        <div id="spacer"></div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#auth">Login/Signup</a>
+            <a href="#races">Races</a>
+            <a href="#drivers">Drivers</a>
+        </nav>
+        <div>
+            <div class="nav-burger"></div>
+            <div class="nav-burger"></div>
+            <div class="nav-burger"></div>
+        </div>
+    </div>
+</header>
+
+
+<main id="app"></main>
+
+<script type="module">
+    import { render } from './scripts/index.js';
+
+    window.addEventListener('hashchange', render);
+    window.addEventListener('DOMContentLoaded', render);
+</script>
 </body>
 </html>
