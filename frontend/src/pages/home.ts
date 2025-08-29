@@ -4,8 +4,6 @@ let intervalId: number | null = null;
 
 function _slideShow(): void {
   const slideShowImages = document.getElementById('slide-show');
-  console.log('slideShowImages:', slideShowImages);
-  console.log('slideShowImages loaded');
   let currentIndex = 0;
   const slides = slideShowImages?.getElementsByTagName('div');
   if (!slides && slides!.length) return;
@@ -52,6 +50,8 @@ export function Home(): Page {
         </div>
       </div>
       <h1>F1 Portal</h1>
+      <p>Welcome to the F1 Portal, your ultimate destination for all things Formula 1!</p>
+      <p>Stay updated with the latest news!</p>
   `
   }
 }

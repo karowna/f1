@@ -1,1 +1,1 @@
-export { render } from './router';
+export { router } from './router';
