@@ -1,5 +1,4 @@
 function _getPreferredTheme(): 'dark' | 'light' {
-  console.log('[Theme] - Detecting system theme');
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
@@ -12,9 +11,13 @@ export function date(): void {
 
 export function theme(): void {
   const root = document.documentElement;
+  const savedTheme = localStorage.getItem('theme') ?? '';
+  if (['light', 'dark'].includes(savedTheme)) root.setAttribute('data-theme', savedTheme);
+  
   document.getElementById('theme-toggle')!.addEventListener('click', () => {
     const current = root.getAttribute('data-theme') || _getPreferredTheme();
-    const next = current === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
   });
 }
