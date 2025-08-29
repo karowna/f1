@@ -1,5 +1,23 @@
+/* Light theme*/
 :root {
-    --text-color: #FFFFFF;
+    --text-color: #1C1C25;
+    --bg-color: #F6F4F0;
+    --div-bg-color: #FFF;
     --margin: 10px;
+    --padding: 10px;
+}
+
+/* Dark theme */
+:root[data-theme="dark"] {
+    --text-color: #FFFFFF;
     --bg-color: #212129;
+    --div-bg-color: #2C2C36;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --text-color: #FFFFFF;
+        --bg-color: #212129;
+        --div-bg-color: #2C2C36;
+    }
 }

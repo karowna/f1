@@ -1,32 +1,35 @@
-import { Page } from '../types';
-import { Home, Auth, NotFound, Races, Drivers} from "../pages";
+import { PageClass } from '../types';
+import { PageName } from '../enums';
+import { Auth, Drivers, Home, NotFound, Races } from "../pages";
 
 class Router {
-  private _routes = [
-    { path: 'home', page: Home },
-    { path: 'auth', page: Auth },
-    { path: 'races', page: Races },
-    { path: 'drivers', page: Drivers },
-    { path: 'not-found', page: NotFound },
+  private _livePage: PageClass | null = null;
+  private readonly _routes = [
+    { path: PageName.HOME, page: Home },
+    { path: PageName.AUTH, page: Auth },
+    { path: PageName.RACES, page: Races },
+    { path: PageName.DRIVERS, page: Drivers },
+    { path: PageName.NOT_FOUND, page: NotFound },
   ];
+  
   constructor() {
     window.addEventListener('hashchange', () => router._render());
     window.addEventListener('DOMContentLoaded', () => router._render());
     console.log('[Router] - Initialised router class');
   }
   
-  private _matchRoute(path: string): (param: string) => Page {
+  private _matchRoute(path: PageName): new (param: string) => PageClass {
     return this._routes.find(r => r.path === path)?.page ?? NotFound;
   }
   
-  private _getPath(): { path: string; param: string | undefined } {
+  private _getPath(): { path: PageName; param: string | undefined } {
     if (!location.pathname.endsWith('index.html')) location.pathname = `${location.pathname}index.html`;
-    if (!location.hash) location.hash = '#home';
-    const [path, param] = location.hash.replace('#', '').split('/');
-    return { path, param};
+    if (!location.hash) location.hash = `#${PageName.HOME}`;
+    let [path, param] = location.hash.replace('#', '').split('/');
+    return { path, param } as { path: PageName; param: string | undefined };
   }
   
-  private _setActiveLinks(path: string): void {
+  private _setActiveLinks(path: PageName): void {
     document.querySelectorAll('nav a').forEach(a => {
       const route = a.getAttribute('href');
       a.classList.toggle('active', route === `#${path}`);
@@ -35,14 +38,14 @@ class Router {
   
   private _render(): void {
     const { path, param } = this._getPath();
-    const page = this._matchRoute(path)(param ?? '');
-    document.getElementById('app')!.innerHTML = page.html;
-    page.loaded();
-    this._routes.forEach((r) => r.path !== path && r.page('').unloaded());
+    this._livePage?.unloaded();
+    this._livePage = new (this._matchRoute(path))(param ?? '');
+    document.getElementById('app')!.innerHTML = this._livePage.getHTML();
+    this._livePage.loaded();
     this._setActiveLinks(path);
   }
   
-  public navigateTo(path: string): void {
+  public navigateTo(path: PageName): void {
     location.hash = `#${path}`;
   }
 }

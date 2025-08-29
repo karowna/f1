@@ -1,7 +1,7 @@
 @import "vars.css";
 
 header {
-    background-color: var(--bg-color);
+    background-color: var(--div-bg-color);
     position: sticky;
     top: 0;
     z-index: 5;
@@ -84,7 +84,7 @@ header {
                 flex: 100%;
                 line-height: 35px;
                 margin: 0px;
-                padding: var(--margin);
+                padding: var(--padding);
                 border-bottom: 1px solid #150000;
             }
             a:last-child {

@@ -1,20 +1,16 @@
 @import "vars.css";
 
 footer {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    text-align: center;
+    background-color: var(--div-bg-color);
     padding: 1rem 0;
-    position: relative;
     bottom: 0;
     width: 100%;
     font-size: 14px;
-    a {
-        color: var(--text-color);
-        text-decoration: none;
-        margin: 0 .5rem;
-    }
-    a:hover {
-        text-decoration: underline;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    p, button {
+        margin: var(--margin);
     }
 }

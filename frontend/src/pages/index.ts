@@ -1,5 +1,5 @@
-export { Home } from './home';
-export { Auth } from './auth';
-export { Races } from './races';
-export { Drivers } from './drivers';
-export { NotFound } from './notFound';
+export { Home } from './Home';
+export { Auth } from './Auth';
+export { Races } from './Races';
+export { Drivers } from './Drivers';
+export { NotFound } from './NotFound';

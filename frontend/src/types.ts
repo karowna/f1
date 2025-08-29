@@ -1,5 +1,5 @@
-export interface Page {
+export interface PageClass {
   loaded: () => void;
   unloaded: () => void;
-  html: string;
+  getHTML: () => string;
 }
