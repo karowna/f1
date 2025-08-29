@@ -1,5 +1,6 @@
 @import "header.css";
 @import "footer.css";
+@import "home.css";
 
 /* General styles */
 @font-face {
@@ -19,4 +20,11 @@ body {
     padding: 0;
     background-color: #15151E;
     color: var(--text-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
 }

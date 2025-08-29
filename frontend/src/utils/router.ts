@@ -1,6 +1,7 @@
+import { Page } from '../types';
 import { Home, Auth, NotFound, Races, Drivers} from "../pages";
 
-const routes = [
+const routes: { path: string; page: (param: string) => Page }[] = [
   { path: 'home', page: Home },
   { path: 'auth', page: Auth },
   { path: 'races', page: Races },
@@ -8,7 +9,7 @@ const routes = [
   { path: 'not-found', page: NotFound },
 ];
 
-function _matchRoute(path: string): (param: string) => string {
+function _matchRoute(path: string): (param: string) => Page {
   return routes.find(r => r.path === path)?.page ?? NotFound;
 }
 
@@ -22,14 +23,16 @@ export function getPath(): { path: string; param: string | undefined } {
 function _setActiveLinks(path: string): void {
   document.querySelectorAll('nav a').forEach(a => {
     const route = a.getAttribute('href');
-    a.classList.toggle('active', route === `#${path}`); // Adjust based on your routing scheme
+    a.classList.toggle('active', route === `#${path}`);
   });
 }
 
 export function render(): void {
   const { path, param } = getPath();
-  const page = _matchRoute(path);
-  document.getElementById('app')!.innerHTML = page(param ?? '');
+  const page = _matchRoute(path)(param ?? '');
+  document.getElementById('app')!.innerHTML = page.html;
+  page.loaded();
+  routes.forEach((r) => r.path !== path && r.page('').unloaded());
   _setActiveLinks(path);
 }
 
