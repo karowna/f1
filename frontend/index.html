@@ -10,7 +10,7 @@
 <body>
 <header>
     <div id="navbar">
-        <div id="logo">
+        <div>
             <a href="#home">
                 <img src="./assets/logo.png" alt="F1 Logo" />
             </a>
@@ -18,20 +18,23 @@
         <div id="spacer"></div>
         <nav>
             <a href="#home">Home</a>
-            <a href="#auth">Login/Signup</a>
             <a href="#races">Races</a>
             <a href="#drivers">Drivers</a>
+            <a href="#auth">Login/Signup</a>
         </nav>
-        <div>
-            <div class="nav-burger"></div>
-            <div class="nav-burger"></div>
-            <div class="nav-burger"></div>
-        </div>
+    </div>
+    <div id="burger-menu">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
 </header>
 
-
 <main id="app"></main>
+
+<footer>
+    <p>F1 Portal. All rights reserved.</p>
+</footer>
 
 <script type="module">
     import { render } from './scripts/index.js';

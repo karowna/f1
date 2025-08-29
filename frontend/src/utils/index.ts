@@ -1,1 +1,1 @@
-export { render, setContentLoaded } from './router';
+export { render } from './router';
