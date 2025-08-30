@@ -6,6 +6,7 @@ export class Home implements PageClass {
 
   constructor(param: string) {
     this._param = param;
+    console.log('[Home] - Initialised Home class');
   }
   public loaded(): void {
     console.log('[Home] - starting slideshow');

@@ -1,6 +1,6 @@
 import { PageClass } from '../types';
 import { PageName } from '../enums';
-import { Auth, Drivers, Home, NotFound, Races } from "../pages";
+import { Auth, Drivers, Home, NotFound, Races, Search } from "../pages";
 
 class Router {
   private _livePage: PageClass | null = null;
@@ -9,6 +9,7 @@ class Router {
     { path: PageName.AUTH, page: Auth },
     { path: PageName.RACES, page: Races },
     { path: PageName.DRIVERS, page: Drivers },
+    { path: PageName.SEARCH, page: Search },
     { path: PageName.NOT_FOUND, page: NotFound },
   ];
   
@@ -38,10 +39,10 @@ class Router {
   
   private _render(): void {
     const { path, param } = this._getPath();
-    this._livePage?.unloaded();
+    this._livePage?.unloaded?.();
     this._livePage = new (this._matchRoute(path))(param ?? '');
     document.getElementById('app')!.innerHTML = this._livePage.getHTML();
-    this._livePage.loaded();
+    this._livePage.loaded?.();
     this._setActiveLinks(path);
   }
   

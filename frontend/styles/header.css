@@ -65,7 +65,7 @@ header {
     display: flex;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
     header {
         #navbar {
             flex-direction: column;

@@ -5,13 +5,7 @@ export class NotFound implements PageClass {
 
   constructor(param: string) {
     this._param = param;
-  }
-  public loaded(): void {
-    console.log('NotFound page loaded', this._param);
-  }
-
-  public unloaded(): void {
-    console.log('NotFound page loaded', this._param);
+    console.log('[NotFound] - Initialised NotFound class');
   }
 
   public getHTML(): string {

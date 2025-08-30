@@ -5,14 +5,15 @@ export class Races implements PageClass {
 
   constructor(param: string) {
     this._param = param;
+    console.log('[Races] - Initialised Races class');
   }
-  public loaded(): void {
-    console.log('Races page loaded', this._param);
-  }
-
-  public unloaded(): void {
-    console.log('Races page loaded', this._param);
-  }
+  // public loaded(): void {
+  //   console.log('Races page loaded', this._param);
+  // }
+  //
+  // public unloaded(): void {
+  //   console.log('Races page loaded', this._param);
+  // }
 
   public getHTML(): string {
     return `

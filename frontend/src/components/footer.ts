@@ -1,23 +1,37 @@
-function _getPreferredTheme(): 'dark' | 'light' {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+enum Theme {
+  LIGHT = 'light',
+  DARK = 'dark'
 }
-
-export function date(): void {
-  const year = new Date().getFullYear();
-  const footer = document.getElementsByTagName('footer')[0];
-  const rights = footer.getElementsByTagName('p')[0]
-  rights.innerHTML = `&copy; ${year} ${rights.innerHTML}`;
-}
-
-export function theme(): void {
-  const root = document.documentElement;
-  const savedTheme = localStorage.getItem('theme') ?? '';
-  if (['light', 'dark'].includes(savedTheme)) root.setAttribute('data-theme', savedTheme);
+class Footer {
+  constructor() {
+    this._setDate();    
+    this._setTheme();
+    console.log('[Footer] - Initialised Footer class');
+  }
   
-  document.getElementById('theme-toggle')!.addEventListener('click', () => {
-    const current = root.getAttribute('data-theme') || _getPreferredTheme();
-    const newTheme = current === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  });
+  private _getPreferredTheme(): Theme {
+    return window.matchMedia(`(prefers-color-scheme: ${Theme.DARK})`).matches ? Theme.DARK : Theme.LIGHT;
+  }
+  
+  private _setDate(): void {
+    const year = new Date().getFullYear();
+    const footer = document.getElementsByTagName('footer')[0];
+    const rights = footer.getElementsByTagName('p')[0]
+    rights.innerHTML = `&copy; ${year} ${rights.innerHTML}`;
+  }
+  
+  private _setTheme(): void {
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme') ?? '';
+    if ([Theme.LIGHT, Theme.DARK].includes(savedTheme as Theme)) root.setAttribute('data-theme', savedTheme);
+
+    document.getElementById('theme-toggle')!.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') || this._getPreferredTheme();
+      const newTheme = current === Theme.DARK ? Theme.LIGHT : Theme.DARK;
+      root.setAttribute('data-theme', newTheme as string);
+      localStorage.setItem('theme', newTheme as string);
+    });
+  }
 }
+
+export const footer =  new Footer();

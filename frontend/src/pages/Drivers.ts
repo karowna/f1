@@ -5,14 +5,15 @@ export class Drivers implements PageClass {
 
   constructor(param: string) {
     this._param = param;
+    console.log('[Drivers] - Initialised Drivers class');
   }
-  public loaded(): void {
-    console.log('Drivers page loaded', this._param);
-  }
-
-  public unloaded(): void {
-    console.log('Drivers page loaded', this._param);
-  }
+  // public loaded(): void {
+  //   console.log('Drivers page loaded', this._param);
+  // }
+  //
+  // public unloaded(): void {
+  //   console.log('Drivers page loaded', this._param);
+  // }
 
   public getHTML(): string {
     return `

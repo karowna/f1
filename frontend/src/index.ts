@@ -1,6 +1,2 @@
 export { router } from './utils'
-import * as components from './components'
-
-components.burgerMenu.click();
-components.footer.date();
-components.footer.theme();
+export { footer, burgerMenu } from './components'

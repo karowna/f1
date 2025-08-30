@@ -5,14 +5,15 @@ export class Auth implements PageClass {
   
   constructor(param: string) {
     this._param = param;
+    console.log('[Auth] - Initialised Auth class');
   }
-  public loaded(): void {
-    console.log('Auth page loaded', this._param);
-  }
-
-  public unloaded(): void {
-    console.log('Auth page loaded', this._param);
-  }
+  // public loaded(): void {
+  //   console.log('Auth page loaded', this._param);
+  // }
+  //
+  // public unloaded(): void {
+  //   console.log('Auth page loaded', this._param);
+  // }
   
   public getHTML(): string {
     return `
