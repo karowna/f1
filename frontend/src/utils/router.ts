@@ -14,9 +14,9 @@ class Router {
   ];
   
   constructor() {
-    window.addEventListener('hashchange', () => router._render());
-    window.addEventListener('DOMContentLoaded', () => router._render());
-    console.log('[Router] - Initialised router class');
+    window.addEventListener('hashchange', () => this._render());
+    window.addEventListener('DOMContentLoaded', () => this._render());
+    console.log('[Router] - Initialised Router class');
   }
   
   private _matchRoute(path: PageName): new (param: string) => PageClass {

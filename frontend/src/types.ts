@@ -1,5 +1,5 @@
 export interface PageClass {
-  loaded?: () => void;
+  loaded?: () => void | Promise<void>;
   unloaded?: () => void;
   getHTML: () => string;
 }
