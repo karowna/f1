@@ -1,7 +1,5 @@
-enum Theme {
-  LIGHT = 'light',
-  DARK = 'dark'
-}
+import { Theme } from "../enums";
+
 class Footer {
   constructor() {
     this._setDate();    

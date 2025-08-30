@@ -1,2 +1,2 @@
 export { router } from './utils'
-export { footer, burgerMenu } from './components'
+export { footer, burgerMenu, aside } from './components'

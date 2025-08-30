@@ -6,3 +6,8 @@ export enum PageName {
   SEARCH = 'search',
   NOT_FOUND = 'notfound',
 }
+
+export enum Theme {
+  LIGHT = 'light',
+  DARK = 'dark'
+}

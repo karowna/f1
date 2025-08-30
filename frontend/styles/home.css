@@ -3,6 +3,7 @@
     height: 500px;
     overflow: hidden;
     position: relative;
+    border-radius: var(--radius);
     /*margin: 0;*/
     div {
         position: absolute;
@@ -19,6 +20,33 @@
     img {
         width: 100%;
         height: auto;
+        border-radius: var(--radius);
         /*display: block;*/
     }
 }
+section {
+    font-size: 150%;
+    line-height: 150%;
+    h1 {
+        padding: 1rem 0;
+        font-size: 200%;
+    }
+    /*img {*/
+    /*    width: 20%;*/
+    /*    height: auto;*/
+    /*    margin: 1rem;*/
+    /*    border-radius: 12px;*/
+    /*}*/
+    /*#img-1 {*/
+    /*    float: right;*/
+    /*}*/
+    /*#img-2 {*/
+    /*    float: left;*/
+    /*}*/
+}
+
+/*@media (max-width: 800px) {*/
+/*    img {*/
+/*        width: 30% !important;*/
+/*    }*/
+/*}*/

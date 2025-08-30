@@ -2,12 +2,38 @@ import { PageClass } from '../types';
 
 export class Home implements PageClass {
   private readonly _param: string;
+  private readonly _slides: number = 4;
   private _intervalId: number | null = null;
 
   constructor(param: string) {
     this._param = param;
-    console.log('[Home] - Initialised Home class');
+    console.log(`[Home] - Initialised Home class with ${this._param}`);
   }
+  
+  private _populateSlides(): string {
+    return Array(this._slides)
+      .fill(0)
+      .map((_, i) => `<div><img src="./assets/slide-${i + 1}.jpg" alt="F1 Car ${i + 1}"></div>`)
+      .join('');
+  }
+  
+  private _populateHome(): string {
+    return `
+      <p>Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs — 
+      from in-depth driver profiles and team insights to race calendars, circuit details, and 
+      the latest results from around the globe.</p>
+      <p>Whether you’re a seasoned follower who knows every lap record or a newcomer eager to 
+        learn, our site gives you a clear view of the drivers behind the wheel, the iconic 
+        tracks they battle on, and the stories that shape each season.</p>
+      <p>Explore the <a href="#drivers">Drivers</a> section to discover your favorites and their 
+        stats, or head over to <a href="#races">Races</a> to keep track of upcoming Grands Prix, 
+        results, and unforgettable highlights. With Formula 1’s unique mix of speed, precision, 
+        and drama, there’s always something new to experience.</p>
+      <p>Buckle up, stay informed, and join us as we follow every turn, pit stop, and 
+        checkered flag of the F1 season.</p>
+    `;
+  }
+  
   public loaded(): void {
     console.log('[Home] - starting slideshow');
     const slideShowImages = document.getElementById('slide-show');
@@ -35,23 +61,11 @@ export class Home implements PageClass {
 
   public getHTML(): string {
     return `
-      <div id="slide-show">
-        <div>
-          <img src="./assets/slide-1.jpg" alt="F1 Car 1">
-        </div>
-        <div>
-          <img src="./assets/slide-2.jpg" alt="F1 Car 2">
-        </div>
-        <div>
-          <img src="./assets/slide-3.jpg" alt="F1 Car 3">
-        </div>
-        <div>
-          <img src="./assets/slide-4.jpg" alt="F1 Car 4">
-        </div>
-      </div>
-      <h1>F1 Portal</h1>
-      <p>Welcome to the F1 Portal, your ultimate destination for all things Formula 1!</p>
-      <p>Stay updated with the latest news!</p>
+      <div id="slide-show">${this._populateSlides()}</div>
+      <section>
+        <h1>F1 Portal</h1>
+        <div>${this._populateHome()}</div>
+      </section>
   `;
   }
 }

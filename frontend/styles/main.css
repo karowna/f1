@@ -3,7 +3,6 @@
 @import "footer.css";
 @import "home.css";
 
-/* General styles */
 @font-face {
     font-family: Titillium;
     src: local("./assets/TitilliumWeb-Regular.ttf");
@@ -30,7 +29,7 @@ body {
     min-height: 100vh;
 }
 
-#app {
+main {
     flex: 1;
     padding: 2rem;
 }
@@ -40,4 +39,55 @@ h1 {
     margin-bottom: 20px;
     width: 100%;
     text-align: center;
+}
+
+#links-section {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 2rem;
+    #links, #socials {
+        padding: 0 0 var(--padding) var(--padding);
+        background-color: var(--container-bg-color);
+        border-radius: var(--radius);
+    }
+    #links {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    #socials {
+        flex: 0 1 50%;
+        max-width: 50%;
+    }
+    h3 {
+        padding-left: var(--padding);
+    }
+    div {
+        font-size: 1.1rem;
+    }
+    a {
+        color: var(--text-color);
+        margin: var(--margin);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    img {
+        max-width: 6%;
+        height: auto;
+    }
+}
+
+@media (max-width: 1000px) {
+    #links-section {
+        flex-direction: column;
+        #socials {
+            flex: 1 1 0;
+            max-width: none;
+        }
+        img {
+            max-width: 6%;
+            height: auto;
+        }
+    }
 }

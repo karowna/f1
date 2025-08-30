@@ -1,7 +1,7 @@
 @import "vars.css";
 
 header {
-    background-color: var(--div-bg-color);
+    background-color: var(--container-bg-color);
     position: sticky;
     top: 0;
     z-index: 5;
