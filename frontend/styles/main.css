@@ -3,6 +3,7 @@
 @import "footer.css";
 @import "home.css";
 @import "not-found.css";
+@import "auth.css";
 
 @font-face {
     font-family: Titillium;

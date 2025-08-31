@@ -15,7 +15,7 @@ export class Home implements PageClass {
       .fill(0)
       .map((_, i) => `<div><img src="./assets/slide-${i + 1}.jpg" alt="F1 Car ${i + 1}"></div>`)
       .join('');
-  }// <img id="img-1" src="./assets/home-1.jpg" alt="f1 car black and white">
+  }
   
   private _populateHome(): string {
     return `

@@ -1,0 +1,57 @@
+@import "vars.css";
+
+#auth {
+    text-align: center;
+    background-color: var(--container-bg-color);
+    border-radius: var(--radius);
+    width: 35%;
+    margin: auto;
+    h1 {
+        font-size: 300%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+    form {
+        padding: 0 0 2rem 0;
+    }
+    input {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: var(--bg-color);
+        border-radius: var(--radius);
+        border: 1px solid var(--bg-color);
+    }
+    button {
+        background-color: var(--bg-color);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: var(--radius);
+        padding: 0.5rem 1rem;
+        font-size: 110%;
+        cursor: pointer;
+    }
+    p:first-child {
+        margin: 0 0 5px 0;
+        color: #E00400;
+        font-style: italic;
+        visibility: hidden;
+    }
+    p:last-child {
+        color: var(--button-text-color);
+        padding-bottom: 1rem;
+    }
+    a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+@media (max-width: 900px) {
+    #auth {
+        width: 80%;
+    }
+}
