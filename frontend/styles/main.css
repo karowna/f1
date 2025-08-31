@@ -2,6 +2,7 @@
 @import "header.css";
 @import "footer.css";
 @import "home.css";
+@import "not-found.css";
 
 @font-face {
     font-family: Titillium;

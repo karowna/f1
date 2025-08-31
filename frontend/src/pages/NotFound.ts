@@ -1,17 +1,36 @@
 import { PageClass } from '../types';
+import { PageName } from "../enums";
 
 export class NotFound implements PageClass {
   private readonly _param: string;
 
   constructor(param: string) {
     this._param = param;
-    console.log('[NotFound] - Initialised NotFound class');
+    console.log(`[NotFound] - Initialised NotFound class, param: ${this._param}`);
+  }
+  public loaded(): void {
+    document.getElementById('links-section')!.style.display = 'none';
+    console.log('NotFound page loaded', this._param);
+  }
+
+  public unloaded(): void {
+    document.getElementById('links-section')!.style.display = 'flex';
+    console.log('NotFound page unloaded', this._param);
   }
 
   public getHTML(): string {
     return `
-      <h1>NotFound Page</h1>
-      <p>This is the not found page. Param: ${this._param}</p>
+      <section id="not-found">
+        <h1>404 – Page Not Found 🏎️💨</h1>
+        <p> </p>
+        <p>
+          Looks like you’ve taken a wrong turn in the pit lane.<br>
+          The page you’re looking for has already sped past the checkered flag.
+        </p>
+        <p>
+          <a href="#${PageName.HOME}">🏁 Back to the starting grid</a>
+        </p>
+      </section>
     `;
   }
 }
