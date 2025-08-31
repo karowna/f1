@@ -15,11 +15,11 @@ export class Home implements PageClass {
       .fill(0)
       .map((_, i) => `<div><img src="./assets/slide-${i + 1}.jpg" alt="F1 Car ${i + 1}"></div>`)
       .join('');
-  }
+  }// <img id="img-1" src="./assets/home-1.jpg" alt="f1 car black and white">
   
   private _populateHome(): string {
     return `
-      <p>Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs — 
+      <p><img src="./assets/home-main.jpg" alt="f1 car black and white">Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs — 
       from in-depth driver profiles and team insights to race calendars, circuit details, and 
       the latest results from around the globe.</p>
       <p>Whether you’re a seasoned follower who knows every lap record or a newcomer eager to 
@@ -62,7 +62,7 @@ export class Home implements PageClass {
   public getHTML(): string {
     return `
       <div id="slide-show">${this._populateSlides()}</div>
-      <section>
+      <section id="home-section">
         <h1>F1 Portal</h1>
         <div>${this._populateHome()}</div>
       </section>

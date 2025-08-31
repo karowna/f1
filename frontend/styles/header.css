@@ -9,7 +9,7 @@ header {
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: .75rem 1rem;
+        padding: .75rem 2rem;
         max-width: 1400px;
         margin-inline: auto;
     }
@@ -24,7 +24,6 @@ header {
         flex-wrap: wrap;
         font-size: 20px;
         justify-content: flex-end;
-        margin-right: var(--margin);
         a {
             color: var(--text-color);
             margin: var(--margin);
@@ -41,7 +40,7 @@ header {
         display: none;
         position: fixed;
         top: 25px;
-        right: 25px;
+        right: 2rem;
         z-index: 10;
         div {
             width: 35px;

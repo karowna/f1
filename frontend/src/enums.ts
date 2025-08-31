@@ -1,9 +1,9 @@
 export enum PageName {
   HOME = 'home',
-  AUTH = 'auth',
   RACES = 'races',
   DRIVERS = 'drivers',
   SEARCH = 'search',
+  AUTH = 'auth',
   NOT_FOUND = 'notfound',
 }
 

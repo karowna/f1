@@ -1,3 +1,3 @@
-export * as burgerMenu from './burgerMenu';
-export * as aside from './aside';
+export * as navbar from './navbar';
+export * as linksSection from './linksSection';
 export * as footer from './footer';
