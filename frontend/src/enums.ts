@@ -11,3 +11,10 @@ export enum Theme {
   LIGHT = 'light',
   DARK = 'dark'
 }
+
+export enum HTTPMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
