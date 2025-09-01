@@ -48,7 +48,7 @@ h1 {
     gap: 2rem;
     padding: 1rem 2rem;
     #links, #socials {
-        padding: 0 0 var(--padding) var(--padding);
+        padding: 0 0 10px 10px;
         background-color: var(--container-bg-color);
         border-radius: var(--radius);
     }
@@ -61,14 +61,14 @@ h1 {
         max-width: 50%;
     }
     h3 {
-        padding-left: var(--padding);
+        padding-left: 10px;
     }
     div {
         font-size: 1.1rem;
     }
     a {
         color: var(--text-color);
-        margin: var(--margin);
+        margin: 10px;
         text-decoration: none;
     }
     a:hover {

@@ -20,6 +20,7 @@
         background-color: var(--bg-color);
         border-radius: var(--radius);
         border: 1px solid var(--bg-color);
+        color: var(--button-text-color);
     }
     button {
         background-color: var(--bg-color);
@@ -31,10 +32,11 @@
         cursor: pointer;
     }
     p:first-child {
-        margin: 0 0 5px 0;
+        margin: 0 0 0.5rem 0;
+        padding: 0 1rem;
         color: #E00400;
         font-style: italic;
-        visibility: hidden;
+        /*visibility: hidden;*/
     }
     p:last-child {
         color: var(--button-text-color);
