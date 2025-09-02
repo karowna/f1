@@ -66,6 +66,7 @@ export class Auth implements PageClass {
     const { inputs, valid } = this._validateInputs();
 
     if (valid) {
+      document.getElementById('overlay')!.classList.toggle('hidden');
       try {
         const email = (document.getElementById('email') as HTMLInputElement)?.value;
         const password = (document.getElementById('password-1') as HTMLInputElement)?.value;
@@ -88,6 +89,7 @@ export class Auth implements PageClass {
         inputs.forEach((input) => input.value = '');
         document.getElementById('auth-error')!.innerHTML = 'An error occurred. Please try again later.';
       }
+      document.getElementById('overlay')!.classList.toggle('hidden');
     }
   }
   

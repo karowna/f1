@@ -2,6 +2,7 @@
 :root {
     --text-color: #1C1C25;
     --bg-color: #F6F4F0;
+    --overlay-color: rgba(33, 33, 41, 0.7);
     --container-bg-color: #FFF;
     --radius: 10px;
 }
@@ -10,6 +11,7 @@
 :root[data-theme="dark"] {
     --text-color: #FFFFFF;
     --bg-color: #212129;
+    --overlay-color: rgba(246, 244, 240, 0.7);
     --container-bg-color: #2C2C36;
 }
 
@@ -17,6 +19,7 @@
     :root:not([data-theme]) {
         --text-color: #FFFFFF;
         --bg-color: #212129;
+        --overlay-color: rgba(246, 244, 240, 0.7);
         --container-bg-color: #2C2C36;
     }
 }

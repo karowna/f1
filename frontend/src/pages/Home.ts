@@ -19,7 +19,7 @@ export class Home implements PageClass {
   
   private _populateHome(): string {
     return `
-      <p><img src="./assets/home-main.jpg" alt="f1 car black and white">Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs — 
+      <p><img src="./assets/home-main.jpg" alt="f1 car black and white">Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs, 
       from in-depth driver profiles and team insights to race calendars, circuit details, and 
       the latest results from around the globe.</p>
       <p>Whether you’re a seasoned follower who knows every lap record or a newcomer eager to 

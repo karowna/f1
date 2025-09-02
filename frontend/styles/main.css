@@ -31,6 +31,7 @@ body {
     min-height: 100vh;
 }
 
+/* Main */
 main {
     flex: 1;
     padding: 2rem;
@@ -43,6 +44,32 @@ h1 {
     text-align: center;
 }
 
+/* Overlay */
+#overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-color);
+    #spinner img {
+        position: absolute;
+        top: 46%;
+        left: 46%;
+        width: 8%;
+        height: auto;
+        display: block;
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Links */
 #links-section {
     display: flex;
     gap: 2rem;
@@ -80,6 +107,7 @@ h1 {
     }
 }
 
+/* Screen size */
 @media (max-width: 1000px) {
     #links-section {
         flex-direction: column;
