@@ -21,6 +21,7 @@
         border-radius: var(--radius);
         border: 1px solid var(--bg-color);
         color: var(--button-text-color);
+        width: 40%;
     }
     button {
         background-color: var(--bg-color);

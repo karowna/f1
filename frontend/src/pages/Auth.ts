@@ -52,36 +52,36 @@ export class Auth implements PageClass {
     return { inputs: inputs, valid: !errorMsg };
   }
   
+  private _handleAction(linkHTML: string, linkHref: string, title: string, msg: string, token: string | null): void {
+    const authLink = document.getElementById('navbar')!.getElementsByTagName('nav')[0].children[4] as HTMLAnchorElement;
+    fetchData.token = token;
+    authLink.innerHTML = linkHTML;
+    authLink.href = linkHref;
+    document.getElementById('auth-title')!.innerHTML = title;
+    document.getElementById('auth-msg')!.innerHTML = msg;
+    document.getElementsByTagName('form')[0].remove();
+  }
+  
   private async _handleSubmit(): Promise<void> {
     const { inputs, valid } = this._validateInputs();
 
-    // TODO: submit to backend
-    console.log('>>>>', valid || 'All inputs valid');
     if (valid) {
       try {
         const email = (document.getElementById('email') as HTMLInputElement)?.value;
         const password = (document.getElementById('password-1') as HTMLInputElement)?.value;
-        const authLink = document.getElementById('navbar')!.getElementsByTagName('nav')[0].children[4] as HTMLAnchorElement;
         if (this._param === 'logout') {
-          console.log('Logging out...');
-          fetchData.token = null;
-          authLink.innerHTML = 'Login/Signup';
-          authLink.href = '#auth/login';
-          document.getElementsByTagName('form')[0].remove();
-          document.getElementById('auth-title')!.innerHTML = 'Logged out';
-          document.getElementById('auth-msg')!.innerHTML = 'See you again soon!';
+          console.log('[Auth] - Logging out...');
+          // TODO: add request to logout?
+          this._handleAction('Login/Signup', '#auth/login', 'Logged out', 'See you again soon!', null);
         } else if (this._param === 'signup') {
-          console.log('Signing up...');
+          console.log('[Auth] - Signing up...');
+          await fetchData.post<{token: string}>('/auth/signup', { email, password });
+          this._handleAction('Login/Signup', '#auth/login', 'Signed up', 'Please verify your email to log in.', null);
         } else if (!this._param || this._param === 'login') {
-          console.log('Logging in...');
+          console.log('[Auth] - Logging in...');
           const loginReq = await fetchData.post<{token: string}>('/auth/login', { email, password });
-          fetchData.token = loginReq.token;
-          console.log('Token set:', fetchData.token);
-          document.getElementById('auth-title')!.innerHTML = 'Logged in';
-          document.getElementById('auth-msg')!.innerHTML = 'Want to leave? <a href="#auth/logout">Log out.</a>';
-          authLink.innerHTML = email.split('@')[0];
-          authLink.href = '#auth/logout';
-          document.getElementsByTagName('form')[0].remove();
+          const msg = 'Want to leave? <a href="#auth/logout">Log out.</a>';
+          this._handleAction('Logout', '#auth/logout', 'Logged in', msg, loginReq.token);
         }
       } catch (error) {
         console.error(`[Auth] - Error during auth request: ${error}`);
@@ -96,12 +96,8 @@ export class Auth implements PageClass {
       e.preventDefault();
       this._handleSubmit();
     });
-    console.log('Auth page loaded', this._param);
+    console.log(`[Auth] - Auth page loaded: ${this._param}`);
   }
-
-  // public unloaded(): void {
-  //   console.log('Auth page loaded', this._param);
-  // }
   
   public getHTML(): string {
     let inputs = '';

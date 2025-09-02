@@ -26,6 +26,9 @@ class Router {
   private _getPath(): { path: PageName; param: string | undefined } {
     if (!location.pathname.endsWith('index.html')) location.pathname = `${location.pathname}index.html`;
     if (!location.hash) location.hash = `#${PageName.HOME}`;
+    console.log('[Router] - Current pathname:', location.hash.startsWith('access_token'));
+    if (location.hash.startsWith('#access_token')) location.hash = `#${PageName.AUTH}`;
+    console.log('[Router] - Current hash:', location.hash);
     let [path, param] = location.hash.replace('#', '').split('/');
     return { path, param } as { path: PageName; param: string | undefined };
   }
