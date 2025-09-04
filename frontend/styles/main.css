@@ -11,14 +11,8 @@
     src: local("./assets/TitilliumWeb-Regular.ttf");
 }
 
-@font-face {
-    font-family: Titillium;
-    src: local("./assets/TitilliumWeb-Bold.ttf");
-    font-weight: bold;
-}
-
 html {
-    color-scheme: light dark; 
+    color-scheme: light dark;
 }
 
 body {

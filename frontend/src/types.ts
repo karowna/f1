@@ -1,9 +1,3 @@
-export interface PageClass {
-  loaded?: () => void | Promise<void>;
-  unloaded?: () => void;
-  getHTML: () => string;
-}
-
 interface APIResponse {
   "api": string;
   "url": string;
@@ -13,6 +7,39 @@ interface APIResponse {
   "season": number;
   "championshipId": string;
 }
+
+interface DriverBasic {
+  "driverId": string;
+  "name": string;
+  "surname": string;
+  "nationality": string;
+  "birthday": string;
+  "number": number;
+  "shortName": string;
+  "url": string;
+}
+
+interface TeamBasic {
+  "teamId": string;
+  "teamName": string;
+  "teamNationality": string;
+  "firstAppeareance": number;
+  "constructorsChampionships": null;
+  "driversChampionships": null;
+  "url": string;
+}
+
+interface Schedule {
+  "date": string | null;
+  "time": string | null;
+}
+
+export interface PageClass {
+  loaded?: () => void | Promise<void>;
+  unloaded?: () => void;
+  getHTML: () => string;
+}
+
 export interface Drivers extends APIResponse {
   "drivers": {
     "driverId":string;
@@ -28,25 +55,8 @@ export interface Drivers extends APIResponse {
 }
 
 export interface Driver extends APIResponse {
-  "driver": {
-    "driverId": string;
-    "name": string;
-    "surname": string;
-    "nationality": string;
-    "birthday": string;
-    "number": number;
-    "shortName": string;
-    "url": string;
-  },
-  "team": {
-    "teamId": string;
-    "teamName": string;
-    "teamNationality": string;
-    "firstAppeareance": number;
-    "constructorsChampionships": null;
-    "driversChampionships": null;
-    "url": string;
-  },
+  "driver": DriverBasic;
+  "team": TeamBasic;
   results: {
     "race": {
       "raceId": string;
@@ -75,5 +85,52 @@ export interface Driver extends APIResponse {
       "retired": null;
     },
     "sprintResult": null;
+  }[];
+}
+
+export interface Races extends APIResponse {
+  "championship": {
+    "championshipId": string;
+    "championshipName": string;
+    "url": string;
+    "year": number;
+  },
+  "races": {
+    "raceId": string;
+    "championshipId": string;
+    "raceName": string;
+    "schedule": {
+      "race": Schedule;
+      "qualy": Schedule;
+      "fp1": Schedule;
+      "fp2": Schedule;
+      "fp3": Schedule;
+      "sprintQualy": Schedule;
+      "sprintRace": Schedule;
+    };
+    "laps": number;
+    "round": number;
+    "url": string;
+    "fast_lap": {
+      "fast_lap": string;
+      "fast_lap_driver_id": string;
+      "fast_lap_team_id": string;
+    };
+    "circuit": {
+      "circuitId": string;
+      "circuitName": string;
+      "country": string;
+      "city": string;
+      "circuitLength": string;
+      "lapRecord": string;
+      "firstParticipationYear": number;
+      "corners": number;
+      "fastestLapDriverId": string;
+      "fastestLapTeamId": string;
+      "fastestLapYear": number;
+      "url": string;
+    };
+    "winner": DriverBasic | null;
+    "teamWinner": TeamBasic | null;
   }[];
 }

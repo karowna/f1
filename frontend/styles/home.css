@@ -27,6 +27,7 @@
 #home-section {
     font-size: 150%;
     line-height: 150%;
+    line-height: 3rem;
     h1 {
         padding: 1rem 0;
         font-size: 200%;
@@ -36,16 +37,24 @@
         height: auto;
         margin: 1rem 1rem 1rem 0;
         border-radius: 12px;
+    }
+    #img-left {
         float: left;
     }
-    /*#img-1 {*/
-    /*    margin: 0 1rem 1rem 1rem;*/
-    /*    float: right;*/
-    /*    width: 15%;*/
-    /*}*/
-    /*#img-2 {*/
-    /*    float: left;*/
-    /*}*/
+    #img-right {
+        float: right;
+    }
+    a {
+        color: var(--text-color);
+        text-align: center;
+        line-height: 75px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+        font-style: italic;
+    }
 }
 
 @media (max-width: 800px) {

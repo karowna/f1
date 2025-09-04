@@ -31,7 +31,7 @@ export class Drivers implements PageClass {
         ul.appendChild(li);
       });
       return {
-        title: `All ${data.drivers.length} drivers of the ${data.season} season`,
+        title: `All ${data.total} drivers of the ${data.season} season`,
         desc: 'Click on a driver to see more details.',
         elem: ul,
       };
