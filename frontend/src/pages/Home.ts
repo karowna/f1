@@ -41,14 +41,12 @@ export class Home implements PageClass {
     const slides = Array.from(slideShowImages?.getElementsByTagName('div') || []);
     if (!slides.length) return;
     const totalSlides = slides.length;
-
-    slides.forEach((slide, i, index) => slide.style.display = i === currentIndex ? 'flex' : 'none');
-
-    this._intervalId = setInterval((): void => {
+    
+    this._intervalId = window.setInterval((): void => {
       console.log('[Home] - changing slide');
       currentIndex = (currentIndex + 1) % totalSlides;
-      slides.forEach((slide, i, index) => slide.style.display = i === currentIndex ? 'flex' : 'none');
-    }, 3000); // Change slide every 3 seconds
+      slides.forEach((slide, i, index) => slide.style.opacity = i === currentIndex ? '1' : '0');
+    }, 3000);
   }
 
   public unloaded(): void {
