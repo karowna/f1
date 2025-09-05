@@ -1,4 +1,4 @@
-import { PageClass, Teams as ITeams, Team } from '../types';
+import { PageClass, Teams as ITeams, Team, DriverTeamContent } from '../types';
 import {fetchData, handleCustomContent} from '../utils';
 
 export class Teams implements PageClass {
@@ -9,26 +9,25 @@ export class Teams implements PageClass {
     console.log('[Teams] - Initialised Teams class');
   }
   
-  private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
-    const path = `/teams${this._param ? `/${this._param}` : ''}`;
-    const data: ITeams | Team = await fetchData.get(path, false, true);
-    if ('teams' in data) {
-      const ul = document.createElement('ul');
-      ul.id = 'teams-list';
-      data.teams.forEach((team) => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = `#teams/${team.teamId}`;
-        a.textContent = team.teamName;
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      return {
-        title: `All ${data.total} teams of the ${data.season} season`,
-        desc: 'Click on a team to see more details.',
-        elem: ul,
-      };
-    }
+  private _populateTeams(data: ITeams): DriverTeamContent {
+    const ul = document.createElement('ul');
+    ul.id = 'teams-list';
+    data.teams.forEach((team) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#teams/${team.teamId}`;
+      a.textContent = team.teamName;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    return {
+      title: `All ${data.total} teams of the ${data.season} season`,
+      desc: 'Click on a team to see more details.',
+      elem: ul,
+    };
+  }
+  
+  private _populateTeam(data: Team): DriverTeamContent {
     const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
     const team = document.createElement('div');
     const logoContainer = document.createElement('div');
@@ -39,24 +38,27 @@ export class Teams implements PageClass {
     team.appendChild(logoContainer);
     const details = document.createElement('ul');
     details.id = 'team-details';
-    const liName = document.createElement('li');
-    liName.innerHTML = `<span>Name:</span> ${teamName}`;
-    details.appendChild(liName);
-    const liNationality = document.createElement('li');
-    liNationality.innerHTML = `<span>Nationality:</span> ${teamNationality}`;
-    details.appendChild(liNationality);
-    const liFirstAppeareance = document.createElement('li');
-    liFirstAppeareance.innerHTML = `<span>First appeareance: </span> ${firstAppeareance}`;
-    details.appendChild(liFirstAppeareance);
-    const liConstructorsChampionships = document.createElement('li');
-    liConstructorsChampionships.innerHTML = `<span>Constructors championships:</span> ${constructorsChampionships}`;
-    details.appendChild(liConstructorsChampionships);
-    const liDriversChampionships = document.createElement('li');
-    liDriversChampionships.innerHTML = `<span>Drivers championships:</span> ${driversChampionships}`;
-    details.appendChild(liDriversChampionships);
+    const allLi = [
+      {Name: teamName},
+      {Nationality: teamNationality},
+      {'First appearance': firstAppeareance},
+      { 'Constructors championships': constructorsChampionships },
+      { 'Drivers championships': driversChampionships },
+    ];
+    allLi.forEach((element) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
+      details.appendChild(li);
+    })
     handleCustomContent(details, 'team', teamId);
     team.appendChild(details);
     return { title: `${teamName}`, desc: '', elem: team };
+  }
+  
+  private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
+    const path = `/teams${this._param ? `/${this._param}` : ''}`;
+    const data: ITeams | Team = await fetchData.get(path, false, true);
+    return 'teams' in data ? this._populateTeams(data) : this._populateTeam(data);
   }
 
   public async loaded(): Promise<void> {
@@ -82,13 +84,6 @@ export class Teams implements PageClass {
     document.getElementById('overlay')!.classList.toggle('hidden');
     console.log(`[Teams] - Teams page loaded: ${this._param}`);
   }
-
-  // public unloaded(): void {
-  //   document.getElementById('teams-title')!.innerHTML = '';
-  //   document.getElementById('teams-desc')!.innerHTML = '';
-  //   document.getElementById('teams')!.innerHTML = '';
-  //   console.log(`[Teams] - Teams page unloaded: ${this._param}`);
-  // }
 
   public getHTML(): string {
     return `

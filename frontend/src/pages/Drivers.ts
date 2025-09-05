@@ -1,4 +1,4 @@
-import { PageClass, Drivers as IDrivers, Driver } from '../types';
+import { PageClass, Drivers as IDrivers, Driver, DriverTeamContent } from '../types';
 import { fetchData } from '../utils';
 import { handleCustomContent } from "../utils";
 
@@ -31,26 +31,48 @@ export class Drivers implements PageClass {
     return position;
   }
   
-  private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
-    const path = `/drivers${this._param ? `/${this._param}` : ''}`;
-    const data: IDrivers | Driver = await fetchData.get(path, false, true);
-    if ('drivers' in data) {
-      const ul = document.createElement('ul');
-      ul.id = 'drivers-list';
-      data.drivers.forEach((driver) => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = `#drivers/${driver.driverId}`;
-        a.textContent = `${driver.name} ${driver.surname}`;
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      return {
-        title: `All ${data.total} drivers of the ${data.season} season`,
-        desc: 'Click on a driver to see more details.',
-        elem: ul,
-      };
-    }
+  private _populateDrivers(data: IDrivers): DriverTeamContent {
+    const ul = document.createElement('ul');
+    ul.id = 'drivers-list';
+    data.drivers.forEach((driver) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#drivers/${driver.driverId}`;
+      a.textContent = `${driver.name} ${driver.surname}`;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    return {
+      title: `All ${data.total} drivers of the ${data.season} season`,
+      desc: 'Click on a driver to see more details.',
+      elem: ul,
+    };
+  }
+  
+  private _populateDriverForAuthenticatedUser(data: Driver): HTMLElement {
+    const results = document.createElement('div');
+    results.id = 'driver-results';
+    const resultsTitle = document.createElement('h2');
+    resultsTitle.textContent = `Results for ${data.season} season`;
+    results.appendChild(resultsTitle);
+    const flexTable = document.createElement('div');
+    flexTable.id = 'flex-table';
+    const raceRowHeader = document.createElement('div');
+    raceRowHeader.className = 'flex-row header';
+    raceRowHeader.innerHTML = `<div class="flex-cell">Race</div><div class="flex-cell">Date</div><div class="flex-cell">Pos</div>`;
+    flexTable.appendChild(raceRowHeader);
+    data.results.forEach((r) => {
+      const { race, result } = r;
+      const raceRow = document.createElement('div');
+      raceRow.className = 'flex-row';
+      raceRow.innerHTML = `<div class="flex-cell">${this._handleRaceNames(race.name)}</div><div class="flex-cell">${race.date}</div><div class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
+      flexTable.appendChild(raceRow);
+    })
+    results.appendChild(flexTable);
+    return results;
+  }
+  
+  private _populateDriver(data: Driver): DriverTeamContent {
     const { name, surname, nationality, birthday, number } = data.driver;
     const { teamName, teamNationality, teamId } = data.team;
     const imgName = this._handleDriverEdgeCases(name, surname);
@@ -61,43 +83,31 @@ export class Drivers implements PageClass {
     driver.appendChild(img);
     const details = document.createElement('ul');
     details.id = 'driver-details';
-    const liName = document.createElement('li');
-    liName.innerHTML = `<span>Name:</span> ${name} ${surname}`;
-    details.appendChild(liName);
-    const liNationality = document.createElement('li');
-    liNationality.innerHTML = `<span>Nationality:</span> ${nationality}`;
-    details.appendChild(liNationality);
-    const liBirthday = document.createElement('li');
-    liBirthday.innerHTML = `<span>Date of birth:</span> ${birthday}`;
-    details.appendChild(liBirthday);
-    const liNUmber = document.createElement('li');
-    liNUmber.innerHTML = `<span>Date of birth:</span> ${number}`;
-    details.appendChild(liNUmber);
-    const liTeam = document.createElement('li');
-    liTeam.innerHTML = `<span>Team:</span> <a href="#teams/${teamId}">${teamName}</a>`;
-    details.appendChild(liTeam);
-    const liTeamNationality = document.createElement('li');
-    liTeamNationality.innerHTML = `<span>Team nationality:</span> ${teamNationality}`;
-    details.appendChild(liTeamNationality);
+    const allLi = [
+      {Name: `${name} ${surname}`},
+      {Nationality: nationality},
+      {'Date of birth': birthday},
+      { 'Car number': number },
+      { Team: `<a href="#teams/${teamId}">${teamName}</a>` },
+      { 'Team nationality': teamNationality },
+    ];
+    allLi.forEach((element) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
+      details.appendChild(li);
+    })
     handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
     if (fetchData.token) {
-      const results = document.createElement('div');
-      results.id = 'driver-results';
-      const resultsTitle = document.createElement('h2');
-      resultsTitle.textContent = `Results for ${data.season} season`;
-      results.appendChild(resultsTitle);
-      const resultsList = document.createElement('ul');
-      data.results.forEach((r) => {
-        const { race, result } = r;
-        const raceLi = document.createElement('li');
-        raceLi.innerHTML = `<span>Race:</span> ${this._handleRaceNames(race.name)}<br> &nbsp;&nbsp;&#8226; <span>Date:</span> ${race.date}<br> &nbsp;&nbsp;&#8226; <span>Finishing position:</span> ${this._handlePosition(result.finishingPosition)}`;
-        resultsList.appendChild(raceLi);
-      })
-      results.appendChild(resultsList);
-      details.appendChild(results);
+      driver.appendChild(this._populateDriverForAuthenticatedUser(data));
     }
     return { title: `${name} ${surname}`, desc: '', elem: driver };
+  }
+  
+  private async _populateContent(): Promise<DriverTeamContent> {
+    const path = `/drivers${this._param ? `/${this._param}` : ''}`;
+    const data: IDrivers | Driver = await fetchData.get(path, false, true);
+    return 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);
   }
   
   public async loaded(): Promise<void> {
@@ -123,13 +133,6 @@ export class Drivers implements PageClass {
     document.getElementById('overlay')!.classList.toggle('hidden');
     console.log(`[Drivers] - Drivers page loaded: ${this._param}`);
   }
-
-  // public unloaded(): void {
-  //   document.getElementById('drivers-title')!.innerHTML = '';
-  //   document.getElementById('drivers-desc')!.innerHTML = '';
-  //   document.getElementById('drivers')!.innerHTML = '';
-  //   console.log(`[Drivers] - Drivers page unloaded: ${this._param}`);
-  // }
 
   public getHTML(): string {
     return `

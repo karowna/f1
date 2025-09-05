@@ -34,6 +34,12 @@ interface Schedule {
   "time": string | null;
 }
 
+export interface DriverTeamContent {
+  title: string;
+  desc: string;
+  elem: HTMLElement;
+}
+
 export interface PageClass {
   loaded?: () => void | Promise<void>;
   unloaded?: () => void;

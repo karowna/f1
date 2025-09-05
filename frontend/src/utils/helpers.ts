@@ -27,7 +27,7 @@ export function handleCustomContent(parentElem: HTMLElement, type: 'driver' | 't
     favouriteP.innerHTML = `<span>${fav ? 'One of your favourite teams ' : 'Click to set as favourite team '}</span>`;
     const favouriteSpan = document.createElement('span');
     favouriteSpan.id = 'favourite-span';
-    favouriteSpan.innerHTML = '&#10084;';
+    favouriteSpan.innerHTML = '&nbsp;&#10084;';
     favouriteSpan.className = fav ? 'favourite' : '';
     favouriteP.addEventListener('click', () => _setFavourite(type, id));
     favouriteP.appendChild(favouriteSpan);

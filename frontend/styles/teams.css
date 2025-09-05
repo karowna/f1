@@ -64,8 +64,8 @@
         border-radius: var(--radius);
         display: block;
         margin: 0 auto 20px auto;
-        background-color: white;
-        border: 10px solid white;
+        background-color: #FFF;
+        border: 10px solid #FFF;
     }
 }
 
