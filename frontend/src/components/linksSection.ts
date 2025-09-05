@@ -29,11 +29,11 @@ class LinksSection {
 
   private _populateSocials(): void {
     const socials = [
-      { name: 'X', url: 'https://x.com/f1', icon: './assets/x.png' },
-      { name: 'Instagram', url: 'https://www.instagram.com/f1/', icon: './assets/instagram.png' },
-      { name: 'YouTube', url: 'https://www.youtube.com/f1', icon: './assets/youtube.png' },
-      { name: 'Facebook', url: 'https://www.facebook.com/Formula1', icon: './assets/facebook.png' },
-      { name: 'TikTok', url: 'https://www.tiktok.com/@f1', icon: './assets/tiktok.png' },
+      { name: 'X', url: 'https://x.com/f1', icon: './assets/socials/x.png' },
+      { name: 'Instagram', url: 'https://www.instagram.com/f1/', icon: './assets/socials/instagram.png' },
+      { name: 'YouTube', url: 'https://www.youtube.com/f1', icon: './assets/socials/youtube.png' },
+      { name: 'Facebook', url: 'https://www.facebook.com/Formula1', icon: './assets/socials/facebook.png' },
+      { name: 'TikTok', url: 'https://www.tiktok.com/@f1', icon: './assets/socials/tiktok.png' },
     ];
 
     const h3 = document.createElement('h3');

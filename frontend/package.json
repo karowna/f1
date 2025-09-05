@@ -6,7 +6,7 @@
     "start:mock:server": "npx tsx watch ./mock-server/app.ts",
     "build": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm",
     "dev": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm --watch",
-    "copy": "copyfiles index.html assets/* styles/* dist",
+    "copy": "copyfiles index.html assets/* assets/**/* styles/* dist",
     "clean": "rimraf dist"
   },
   "devDependencies": {

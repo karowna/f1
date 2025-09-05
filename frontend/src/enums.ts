@@ -2,7 +2,7 @@ export enum PageName {
   HOME = 'home',
   RACES = 'races',
   DRIVERS = 'drivers',
-  SEARCH = 'search',
+  TEAMS = 'teams',
   AUTH = 'auth',
   NOT_FOUND = 'notfound',
 }

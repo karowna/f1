@@ -88,6 +88,14 @@ export interface Driver extends APIResponse {
   }[];
 }
 
+export interface Team extends APIResponse {
+  "team": TeamBasic[]
+}
+
+export interface Teams extends APIResponse {
+  "teams": TeamBasic[]
+}
+
 export interface Races extends APIResponse {
   "championship": {
     "championshipId": string;

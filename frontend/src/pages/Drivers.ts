@@ -18,7 +18,7 @@ export class Drivers implements PageClass {
   
   private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
     const path = `/drivers${this._param ? `/${this._param}` : ''}`;
-    const data: IDrivers | Driver= await fetchData.get(path, false, true);
+    const data: IDrivers | Driver = await fetchData.get(path, false, true);
     if ('drivers' in data) {
       const ul = document.createElement('ul');
       ul.id = 'drivers-list';
@@ -53,7 +53,7 @@ export class Drivers implements PageClass {
   public async loaded(): Promise<void> {
     document.getElementById('overlay')!.classList.toggle('hidden');
     try {
-      let uiData: { title: string; desc: string; elem: HTMLElement } | null = null;
+      let uiData: { title: string; desc: string; elem: HTMLElement };
       if (this._param) {
         console.log(`[Drivers] - Fetching details for driver ID ${this._param}...`);
         uiData = await this._populateContent();

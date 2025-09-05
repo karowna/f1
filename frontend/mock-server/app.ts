@@ -20,6 +20,18 @@ app.get("/drivers/:id", async (req, res): Promise<void> => {
   res.status(200).json(data);
 });
 
+app.get("/teams", async (req, res): Promise<void> => {
+  const resp: Response = await fetch('https://f1api.dev/api/current/teams');
+  const data = await resp.json();
+  res.status(200).json(data);
+});
+
+app.get("/teams/:id", async (req, res): Promise<void> => {
+  const resp: Response = await fetch(`https://f1api.dev/api/current/teams/${req.params.id}`);
+  const data = await resp.json();
+  res.status(200).json(data);
+});
+
 app.get("/races", async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current');
   const data = await resp.json();

@@ -1,6 +1,6 @@
 import { PageClass } from '../types';
 import { PageName } from '../enums';
-import { Auth, Drivers, Home, NotFound, Races, Search } from "../pages";
+import { Auth, Drivers, Home, NotFound, Races, Teams } from "../pages";
 
 class Router {
   private _livePage: PageClass | null = null;
@@ -9,7 +9,7 @@ class Router {
     { path: PageName.AUTH, page: Auth },
     { path: PageName.RACES, page: Races },
     { path: PageName.DRIVERS, page: Drivers },
-    { path: PageName.SEARCH, page: Search },
+    { path: PageName.TEAMS, page: Teams },
     { path: PageName.NOT_FOUND, page: NotFound },
   ];
   
