@@ -10,6 +10,7 @@ class FetchData {
     token && headers.append('Authorization', `Bearer ${this._token}`);
     const options: { method: HTTPMethod; headers: Headers; body?: string } = { method, headers};
     data && (options.body = JSON.stringify(data));
+    console.log('Request options:', options);
     // return fetch(`http://localhost:3000/api${path}`, options);
     // return fetch(`https://hnxfgutvgswxxvzctxto.supabase.co/functions/v1${path}`, options);
     return fetch(`http://localhost:3000${path}`, options);

@@ -14,7 +14,7 @@ export class Races implements PageClass {
       const data: IRaces = await fetchData.get('/races', false, true);
       document.getElementById('races-title')!.innerHTML = `All ${data.total} races of the ${data.season} season`;
       document.getElementById('races')!.innerHTML = data.races.map((r) => {
-        return `Race: ${r.raceName} - Laps: ${r.laps} - Winner: ${r.winner?.name} ${r.winner?.surname} - Date: ${new Date(r.schedule.race.date as string).toLocaleDateString('en-GB')}`
+        return `Race: ${r.raceName} - Laps: ${r.laps} - Winner: <a href="#drivers/${r.winner?.driverId}">${r.winner?.name} ${r.winner?.surname}</a> - Team: <a href="#teams/${r.teamWinner?.teamId}">${r.teamWinner?.teamName}</a> - Date: ${new Date(r.schedule.race.date as string).toLocaleDateString('en-GB')}`
       }).join('<br>');
     } catch (error) {
       document.getElementById('races')!.innerHTML = 'Oops! Something went wrong. Please try again later.';

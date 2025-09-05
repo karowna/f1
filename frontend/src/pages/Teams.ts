@@ -1,5 +1,5 @@
 import { PageClass, Teams as ITeams, Team } from '../types';
-import { fetchData } from '../utils';
+import {fetchData, handleCustomContent} from '../utils';
 
 export class Teams implements PageClass {
   private readonly _param: string;
@@ -8,7 +8,7 @@ export class Teams implements PageClass {
     this._param = param;
     console.log('[Teams] - Initialised Teams class');
   }
-
+  
   private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
     const path = `/teams${this._param ? `/${this._param}` : ''}`;
     const data: ITeams | Team = await fetchData.get(path, false, true);
@@ -29,14 +29,32 @@ export class Teams implements PageClass {
         elem: ul,
       };
     }
-    const { teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
+    const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
     const team = document.createElement('div');
+    const logoContainer = document.createElement('div');
     const img = document.createElement('img');
-    img.src = `./assets/logos/${teamName}.png`;
+    img.src = `./assets/logos/${teamId}.png`;
     img.alt = `${teamName} logo`;
-    team.appendChild(img);
-    const details = document.createElement('div');
-    details.innerHTML = `Name: ${teamName}<br>Nationality: ${teamNationality}<br>First appeareance: ${firstAppeareance}<br>Constructors championships: ${constructorsChampionships}<br>Team: ${teamName}<br>Drivers championships: ${driversChampionships}`;
+    logoContainer.appendChild(img);
+    team.appendChild(logoContainer);
+    const details = document.createElement('ul');
+    details.id = 'team-details';
+    const liName = document.createElement('li');
+    liName.innerHTML = `<span>Name:</span> ${teamName}`;
+    details.appendChild(liName);
+    const liNationality = document.createElement('li');
+    liNationality.innerHTML = `<span>Nationality:</span> ${teamNationality}`;
+    details.appendChild(liNationality);
+    const liFirstAppeareance = document.createElement('li');
+    liFirstAppeareance.innerHTML = `<span>First appeareance: </span> ${firstAppeareance}`;
+    details.appendChild(liFirstAppeareance);
+    const liConstructorsChampionships = document.createElement('li');
+    liConstructorsChampionships.innerHTML = `<span>Constructors championships:</span> ${constructorsChampionships}`;
+    details.appendChild(liConstructorsChampionships);
+    const liDriversChampionships = document.createElement('li');
+    liDriversChampionships.innerHTML = `<span>Drivers championships:</span> ${driversChampionships}`;
+    details.appendChild(liDriversChampionships);
+    handleCustomContent(details, 'team', teamId);
     team.appendChild(details);
     return { title: `${teamName}`, desc: '', elem: team };
   }
@@ -56,7 +74,9 @@ export class Teams implements PageClass {
       document.getElementById('teams-desc')!.innerHTML = uiData.desc;
       document.getElementById('teams')!.appendChild(uiData.elem);
     } catch (error) {
-      document.getElementById('teams')!.innerHTML = 'Oops! Something went wrong. Please try again later.';
+      const parent = document.getElementById('teams')!;
+      parent.innerHTML = 'Oops! Something went wrong. Please try again later.';
+      parent.style.textAlign = 'center';
       console.error('[Teams] - Error loading teams data:', error);
     }
     document.getElementById('overlay')!.classList.toggle('hidden');

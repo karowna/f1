@@ -1,5 +1,6 @@
 import { PageClass, Drivers as IDrivers, Driver } from '../types';
 import { fetchData } from '../utils';
+import { handleCustomContent } from "../utils";
 
 export class Drivers implements PageClass {
   private readonly _param: string;
@@ -37,15 +38,34 @@ export class Drivers implements PageClass {
       };
     }
     const { name, surname, nationality, birthday, number } = data.driver;
-    const { teamName, teamNationality } = data.team;
+    const { teamName, teamNationality, teamId } = data.team;
     const imgName = this._handleDriverEdgeCases(name, surname);
     const driver = document.createElement('div');
     const img = document.createElement('img');
     img.src = `https://www.kymillman.com/wp-content/uploads/f1/pages/driver-profiles/driver-faces/${imgName}-f1-driver-profile-picture.png`;
     img.alt = `${name} ${surname}`;
     driver.appendChild(img);
-    const details = document.createElement('div');
-    details.innerHTML = `Name: ${name} ${surname}<br>Nationality: ${nationality}<br>Date of birth: ${birthday}<br>Car number: ${number}<br>Team: ${teamName}<br>Team nationality: ${teamNationality}`
+    const details = document.createElement('ul');
+    details.id = 'driver-details';
+    const liName = document.createElement('li');
+    liName.innerHTML = `<span>Name:</span> ${name} ${surname}`;
+    details.appendChild(liName);
+    const liNationality = document.createElement('li');
+    liNationality.innerHTML = `<span>Nationality:</span> ${nationality}`;
+    details.appendChild(liNationality);
+    const liBirthday = document.createElement('li');
+    liBirthday.innerHTML = `<span>Date of birth:</span> ${birthday}`;
+    details.appendChild(liBirthday);
+    const liNUmber = document.createElement('li');
+    liNUmber.innerHTML = `<span>Date of birth:</span> ${number}`;
+    details.appendChild(liNUmber);
+    const liTeam = document.createElement('li');
+    liTeam.innerHTML = `<span>Team:</span> <a href="#teams/${teamId}">${teamName}</a>`;
+    details.appendChild(liTeam);
+    const liTeamNationality = document.createElement('li');
+    liTeamNationality.innerHTML = `<span>Team nationality:</span> ${teamNationality}`;
+    details.appendChild(liTeamNationality);
+    handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
     return { title: `${name} ${surname}`, desc: '', elem: driver };
   }
@@ -65,7 +85,9 @@ export class Drivers implements PageClass {
       document.getElementById('drivers-desc')!.innerHTML = uiData.desc;
       document.getElementById('drivers')!.appendChild(uiData.elem);
     } catch (error) {
-      document.getElementById('drivers')!.innerHTML = 'Oops! Something went wrong. Please try again later.';
+      const parent = document.getElementById('drivers')!;
+      parent.innerHTML = 'Oops! Something went wrong. Please try again later.';
+      parent.style.textAlign = 'center';
       console.error('[Drivers] - Error loading drivers data:', error);
     }
     document.getElementById('overlay')!.classList.toggle('hidden');

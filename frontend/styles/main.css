@@ -5,6 +5,7 @@
 @import "not-found.css";
 @import "auth.css";
 @import "drivers.css";
+@import "teams.css";
 
 @font-face {
     font-family: Titillium;

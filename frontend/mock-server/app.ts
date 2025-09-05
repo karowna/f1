@@ -7,6 +7,7 @@ const port = 3000;
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("dist"));
+app.use(express.json())
 
 app.get("/drivers", async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current/drivers');
@@ -36,6 +37,18 @@ app.get("/races", async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current');
   const data = await resp.json();
   res.status(200).json(data);
+});
+
+app.post("/favourites/driver/:id", async (req, res): Promise<void> => {
+  console.log(`Toggling favourite for driver ID ${req.params.id}...`, JSON.stringify(req.body));
+  await require('util').promisify(setTimeout)(500);
+  res.status(200).json({ message: `Favourite status for driver ID ${req.params.id} toggled. ${req.body}` });
+});
+
+app.post("/favourites/team/:id", async (req, res): Promise<void> => {
+  console.log(`Toggling favourite for team ID ${req.params.id}...`, JSON.stringify(req.body));
+  await require('util').promisify(setTimeout)(500);
+  res.status(200).json({ message: `Favourite status for driver ID ${req.params.id} toggled. ${req.body}` });
 });
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
