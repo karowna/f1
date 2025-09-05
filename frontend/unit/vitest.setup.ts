@@ -1,0 +1,46 @@
+document.body.innerHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>F1 Portal</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+</head>
+<body>
+<header>
+    <div id="navbar">
+        <div>
+            <a href="#home">
+                <img src="./assets/logo.png" alt="F1 Logo" />
+            </a>
+        </div>
+        <div id="spacer"></div>
+        <nav></nav>
+    </div>
+    <div id="burger-menu">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</header>
+
+<main id="app"></main>
+<div id="overlay" class="hidden">
+    <div id="spinner"><img src="./assets/spinner.png" alt="spinner icon"></div>
+</div>
+
+<section id="links-section">
+    <nav id="links"></nav>
+    <nav id="socials"></nav>
+</section>
+
+<footer>
+    <p>F1 Portal. All rights reserved.</p>
+    <button id="theme-toggle">Toggle theme 🌓</button>
+</footer>
+
+<script type="module" src="./scripts/index.js"></script>
+</body>
+</html>
+`
