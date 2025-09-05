@@ -16,6 +16,20 @@ export class Drivers implements PageClass {
     }
     return `${name}-${surname}`.toLowerCase();
   }
+
+  private _handleRaceNames(name: string): string {
+    if (name.includes('Italy')) {
+      [name] = name.split(' e ');
+    }
+    return name.replace('2025', '');
+  }
+
+  private _handlePosition(position: string): string {
+    if (position === '-') {
+      position = 'NC';
+    }
+    return position;
+  }
   
   private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
     const path = `/drivers${this._param ? `/${this._param}` : ''}`;
@@ -67,6 +81,22 @@ export class Drivers implements PageClass {
     details.appendChild(liTeamNationality);
     handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
+    if (fetchData.token) {
+      const results = document.createElement('div');
+      results.id = 'driver-results';
+      const resultsTitle = document.createElement('h2');
+      resultsTitle.textContent = `Results for ${data.season} season`;
+      results.appendChild(resultsTitle);
+      const resultsList = document.createElement('ul');
+      data.results.forEach((r) => {
+        const { race, result } = r;
+        const raceLi = document.createElement('li');
+        raceLi.innerHTML = `<span>Race:</span> ${this._handleRaceNames(race.name)}<br> &nbsp;&nbsp;&#8226; <span>Date:</span> ${race.date}<br> &nbsp;&nbsp;&#8226; <span>Finishing position:</span> ${this._handlePosition(result.finishingPosition)}`;
+        resultsList.appendChild(raceLi);
+      })
+      results.appendChild(resultsList);
+      details.appendChild(results);
+    }
     return { title: `${name} ${surname}`, desc: '', elem: driver };
   }
   
