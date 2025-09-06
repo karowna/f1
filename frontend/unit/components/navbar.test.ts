@@ -1,7 +1,7 @@
 import { it, expect, describe } from "vitest";
 import { navbar } from "../../src/components/navbar";
 
-describe("navbar component", () => {
+describe("navbar test", () => {
   it("should be instantiated", () => {
     // assert
     expect(navbar).toBeInstanceOf(Object);

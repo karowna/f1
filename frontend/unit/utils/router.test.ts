@@ -2,7 +2,7 @@ import {describe, expect, it} from "vitest";
 import {router} from "../../src"
 import {PageName} from "../../src/enums";
 
-describe("router", () => {
+describe("router tests", () => {
   it("should be instantiated", () => {
     // assert
     expect(router).toBeInstanceOf(Object);

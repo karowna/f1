@@ -1,7 +1,7 @@
 import { HTTPMethod } from '../enums';
 
 class FetchData {
-  private _token: string | null = 'null';
+  private _token: string | null = null;
   private _cache: { [key:string]: { data: unknown, expiry: number} } = {};
   
   private _sendRequest(method: HTTPMethod, path: string, token: boolean, data: unknown): Promise<Response> {
@@ -44,7 +44,7 @@ class FetchData {
   }
 
   public async put<T>(path: string, data: unknown, token = false): Promise<T> {
-    const response = await this._sendRequest(HTTPMethod.DELETE, path, token, data);
+    const response = await this._sendRequest(HTTPMethod.PUT, path, token, data);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     return response.json();
   }

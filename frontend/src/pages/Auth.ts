@@ -36,7 +36,7 @@ export class Auth implements PageClass {
         errorMsg = 'Please enter a valid email address';
       } else if (invalidInput.id === 'password-1') {
         errorMsg = invalidInput.value
-          ? 'Password must be at least 8 characters long and include at least 1 uppercase letter, 1 lowercase letter, and 1 number.'
+          ? 'Password must be at least 8 characters long and include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
           : 'Please enter a password';
       }
       invalidInput.className = 'error';
