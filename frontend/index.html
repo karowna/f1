@@ -27,7 +27,9 @@
 
 <main id="app"></main>
 <div id="overlay" class="hidden">
-    <div id="spinner"><img src="./assets/spinner.png" alt="spinner icon"></div>
+    <div id="spinner" role="status" aria-live="polite">
+        <img src="./assets/spinner.png" alt="spinner icon"  aria-hidden="true">
+    </div>
 </div>
 
 <section id="links-section">

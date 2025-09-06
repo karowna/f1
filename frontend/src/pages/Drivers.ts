@@ -57,15 +57,18 @@ export class Drivers implements PageClass {
     results.appendChild(resultsTitle);
     const flexTable = document.createElement('div');
     flexTable.id = 'flex-table';
+    flexTable.role = 'table';
     const raceRowHeader = document.createElement('div');
     raceRowHeader.className = 'flex-row header';
-    raceRowHeader.innerHTML = `<div class="flex-cell">Race</div><div class="flex-cell">Date</div><div class="flex-cell">Pos</div>`;
+    raceRowHeader.role = 'row';
+    raceRowHeader.innerHTML = `<div role="columnheader" class="flex-cell">Race</div><div role="columnheader" class="flex-cell">Date</div><div role="columnheader" class="flex-cell">Pos</div>`;
     flexTable.appendChild(raceRowHeader);
     data.results.forEach((r) => {
       const { race, result } = r;
       const raceRow = document.createElement('div');
       raceRow.className = 'flex-row';
-      raceRow.innerHTML = `<div class="flex-cell">${this._handleRaceNames(race.name)}</div><div class="flex-cell">${race.date}</div><div class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
+      raceRow.role = 'row';
+      raceRow.innerHTML = `<div role="cell" class="flex-cell">${this._handleRaceNames(race.name)}</div><div role="cell" class="flex-cell">${race.date}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
       flexTable.appendChild(raceRow);
     })
     results.appendChild(flexTable);

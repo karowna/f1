@@ -9,11 +9,15 @@ export class NotFound implements PageClass {
     console.log(`[NotFound] - Initialised NotFound class, param: ${this._param}`);
   }
   public loaded(): void {
+    document.getElementById('app')!.role = 'main';
+    document.getElementById('app')!.ariaLabel = '404 – Page Not Found';
     document.getElementById('links-section')!.style.display = 'none';
     console.log('NotFound page loaded', this._param);
   }
 
   public unloaded(): void {
+    document.getElementById('app')!.removeAttribute('role');
+    document.getElementById('app')!.removeAttribute('aria-label');
     document.getElementById('links-section')!.style.display = 'flex';
     console.log('NotFound page unloaded', this._param);
   }
