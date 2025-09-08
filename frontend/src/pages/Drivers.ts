@@ -49,6 +49,10 @@ export class Drivers implements PageClass {
     };
   }
   
+  private _convertDate(dateStr: string): string {
+    return new Date(dateStr).toLocaleString('en-GB').toString().split(',')[0];
+  }
+  
   private _populateDriverForAuthenticatedUser(data: Driver): HTMLElement {
     const results = document.createElement('div');
     results.id = 'driver-results';
@@ -68,7 +72,7 @@ export class Drivers implements PageClass {
       const raceRow = document.createElement('div');
       raceRow.className = 'flex-row';
       raceRow.role = 'row';
-      raceRow.innerHTML = `<div role="cell" class="flex-cell">${this._handleRaceNames(race.name)}</div><div role="cell" class="flex-cell">${race.date}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
+      raceRow.innerHTML = `<div role="cell" class="flex-cell">${this._handleRaceNames(race.name)}</div><div role="cell" class="flex-cell">${this._convertDate(race.date)}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
       flexTable.appendChild(raceRow);
     })
     results.appendChild(flexTable);

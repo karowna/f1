@@ -42,8 +42,8 @@ export class Teams implements PageClass {
       {Name: teamName},
       {Nationality: teamNationality},
       {'First appearance': firstAppeareance},
-      { 'Constructors championships': constructorsChampionships },
-      { 'Drivers championships': driversChampionships },
+      { 'Constructors championships': constructorsChampionships ?? '0' },
+      { 'Drivers championships': driversChampionships ?? '0' },
     ];
     allLi.forEach((element) => {
       const li = document.createElement('li');
