@@ -1,6 +1,12 @@
 import { PageClass, Drivers as IDrivers, Driver, DriverTeamRaceContent } from '../types';
-import { fetchData } from '../utils';
-import { handleCustomContent } from "../utils";
+import {
+  fetchData,
+  handleCustomContent,
+  appendListItems,
+  getFlexTable,
+  getFlexTableRow,
+  setErrorMsg,
+} from '../utils';
 
 export class Drivers implements PageClass {
   private readonly _param: string;
@@ -59,22 +65,15 @@ export class Drivers implements PageClass {
     const resultsTitle = document.createElement('h2');
     resultsTitle.textContent = `Results for ${data.season} season`;
     results.appendChild(resultsTitle);
-    const flexTable = document.createElement('div');
-    flexTable.id = 'flex-table';
-    flexTable.role = 'table';
-    const raceRowHeader = document.createElement('div');
-    raceRowHeader.className = 'flex-row header';
-    raceRowHeader.role = 'row';
-    raceRowHeader.innerHTML = `<div role="columnheader" class="flex-cell">Race</div><div role="columnheader" class="flex-cell">Date</div><div role="columnheader" class="flex-cell">Pos</div>`;
-    flexTable.appendChild(raceRowHeader);
+    const flexTable = getFlexTable(['Race', 'Date', 'Pos']);
     data.results.forEach((r, i) => {
       const { race, result } = r;
-      const raceRow = document.createElement('div');
-      raceRow.className = 'flex-row';
-      raceRow.role = 'row';
-      i % 2 === 0 && raceRow.classList.add('alt');
-      raceRow.innerHTML = `<div role="cell" class="flex-cell"><a href="#races/${race.raceId}">${this._handleRaceNames(race.name)}</a></div><div role="cell" class="flex-cell">${this._convertDate(race.date)}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
-      flexTable.appendChild(raceRow);
+      const content = [
+        `<a href="#races/${race.raceId}">${this._handleRaceNames(race.name)}</a>`,
+        this._convertDate(race.date),
+        this._handlePosition(result.finishingPosition)
+      ];
+      flexTable.appendChild(getFlexTableRow(content, i));
     })
     results.appendChild(flexTable);
     return results;
@@ -100,11 +99,7 @@ export class Drivers implements PageClass {
       { Team: `<a href="#teams/${teamId}">${teamName}</a>` },
       { 'Team nationality': teamNationality },
     ];
-    allLi.forEach((element) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
-      details.appendChild(li);
-    })
+    appendListItems(details, allLi);
     handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
     if (fetchData.token) {
@@ -113,31 +108,18 @@ export class Drivers implements PageClass {
     return { title: `${name} ${surname}`, desc: '', elem: driver };
   }
   
-  private async _populateContent(): Promise<DriverTeamRaceContent> {
-    const path = `/drivers${this._param ? `/${this._param}` : ''}`;
-    const data: IDrivers | Driver = await fetchData.get(path, false, true);
-    return 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);
-  }
-  
   public async loaded(): Promise<void> {
     document.getElementById('overlay')!.classList.toggle('hidden');
     try {
-      let uiData: { title: string; desc: string; elem: HTMLElement };
-      if (this._param) {
-        console.log(`[Drivers] - Fetching details for driver ID ${this._param}...`);
-        uiData = await this._populateContent();
-      } else {
-        console.log('[Drivers] - Fetching list of drivers...');
-        uiData = await this._populateContent();
-      }
+      console.log(`[Drivers] - Fetching ${this._param ? `details for driver ID ${this._param}` : 'Fetching list of drivers'}...`);
+      const path = `/drivers${this._param ? `/${this._param}` : ''}`;
+      const data: IDrivers | Driver = await fetchData.get(path, false, true);
+      const uiData = 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);
       document.getElementById('drivers-title')!.innerHTML = uiData.title;
       document.getElementById('drivers-desc')!.innerHTML = uiData.desc;
       document.getElementById('drivers')!.appendChild(uiData.elem);
     } catch (error) {
-      const parent = document.getElementById('drivers')!;
-      parent.innerHTML = 'Oops! Something went wrong. Please try again later.';
-      parent.style.textAlign = 'center';
-      console.error('[Drivers] - Error loading drivers data:', error);
+      setErrorMsg('drivers', error);
     }
     document.getElementById('overlay')!.classList.toggle('hidden');
     console.log(`[Drivers] - Drivers page loaded: ${this._param}`);

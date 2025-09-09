@@ -45,3 +45,39 @@ export function handleRaceNames(name: string): string {
   }
   return name.replace('2025', '');
 }
+
+export function appendListItems(parent: HTMLElement, allLi: {}[]): void {
+  allLi.forEach((element) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
+    parent.appendChild(li);
+  })
+}
+
+export function getFlexTable(headings: string[]): HTMLElement {
+  const flexTable = document.createElement('div');
+  flexTable.id = 'flex-table';
+  flexTable.role = 'table';
+  const raceRowHeader = document.createElement('div');
+  raceRowHeader.className = 'flex-row header';
+  raceRowHeader.role = 'row';
+  raceRowHeader.innerHTML = headings.map((h) => `<div role="columnheader" class="flex-cell">${h}</div>`).join('');
+  flexTable.appendChild(raceRowHeader);
+  return flexTable;
+}
+
+export function getFlexTableRow(content: string[], index: number): HTMLElement {
+  const raceRow = document.createElement('div');
+  raceRow.className = 'flex-row';
+  raceRow.role = 'row';
+  index % 2 === 0 && raceRow.classList.add('alt');
+  raceRow.innerHTML = content.map((c) => `<div role="cell" class="flex-cell">${c}</div>`).join('');
+  return raceRow;
+}
+
+export function setErrorMsg(elemName: string, error: unknown): void {
+  const parent = document.getElementById(elemName)!;
+  parent.innerHTML = 'Oops! Something went wrong. Please try again later.';
+  parent.style.textAlign = 'center';
+  console.error(`[${elemName[0].toUpperCase()}${elemName.slice(1)}] - Error loading ${elemName} data: ${error}`);
+}

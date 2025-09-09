@@ -1,5 +1,5 @@
 import { PageClass, Teams as ITeams, Team, DriverTeamRaceContent } from '../types';
-import {fetchData, handleCustomContent} from '../utils';
+import {appendListItems, fetchData, handleCustomContent, setErrorMsg} from '../utils';
 
 export class Teams implements PageClass {
   private readonly _param: string;
@@ -46,11 +46,7 @@ export class Teams implements PageClass {
       { 'Constructors championships': constructorsChampionships ?? '0' },
       { 'Drivers championships': driversChampionships ?? '0' },
     ];
-    allLi.forEach((element) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
-      details.appendChild(li);
-    })
+    appendListItems(details, allLi);
     handleCustomContent(details, 'team', teamId);
     team.appendChild(details);
     return { title: `${teamName}`, desc: '', elem: team };
@@ -77,10 +73,7 @@ export class Teams implements PageClass {
       document.getElementById('teams-desc')!.innerHTML = uiData.desc;
       document.getElementById('teams')!.appendChild(uiData.elem);
     } catch (error) {
-      const parent = document.getElementById('teams')!;
-      parent.innerHTML = 'Oops! Something went wrong. Please try again later.';
-      parent.style.textAlign = 'center';
-      console.error('[Teams] - Error loading teams data:', error);
+      setErrorMsg('teams', error);
     }
     document.getElementById('overlay')!.classList.toggle('hidden');
     console.log(`[Teams] - Teams page loaded: ${this._param}`);
