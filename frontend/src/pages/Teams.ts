@@ -1,4 +1,4 @@
-import { PageClass, Teams as ITeams, Team, DriverTeamContent } from '../types';
+import { PageClass, Teams as ITeams, Team, DriverTeamRaceContent } from '../types';
 import {fetchData, handleCustomContent} from '../utils';
 
 export class Teams implements PageClass {
@@ -9,7 +9,7 @@ export class Teams implements PageClass {
     console.log('[Teams] - Initialised Teams class');
   }
   
-  private _populateTeams(data: ITeams): DriverTeamContent {
+  private _populateTeams(data: ITeams): DriverTeamRaceContent {
     const ul = document.createElement('ul');
     ul.id = 'teams-list';
     data.teams.forEach((team) => {
@@ -27,7 +27,7 @@ export class Teams implements PageClass {
     };
   }
   
-  private _populateTeam(data: Team): DriverTeamContent {
+  private _populateTeam(data: Team): DriverTeamRaceContent {
     const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
     const team = document.createElement('div');
     const logoContainer = document.createElement('div');
@@ -42,6 +42,7 @@ export class Teams implements PageClass {
       {Name: teamName},
       {Nationality: teamNationality},
       {'First appearance': firstAppeareance},
+      { 'Championship points': 'N/A' }, // TODO: Update when API supports it
       { 'Constructors championships': constructorsChampionships ?? '0' },
       { 'Drivers championships': driversChampionships ?? '0' },
     ];

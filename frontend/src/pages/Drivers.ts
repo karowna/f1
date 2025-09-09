@@ -1,4 +1,4 @@
-import { PageClass, Drivers as IDrivers, Driver, DriverTeamContent } from '../types';
+import { PageClass, Drivers as IDrivers, Driver, DriverTeamRaceContent } from '../types';
 import { fetchData } from '../utils';
 import { handleCustomContent } from "../utils";
 
@@ -31,7 +31,7 @@ export class Drivers implements PageClass {
     return position;
   }
   
-  private _populateDrivers(data: IDrivers): DriverTeamContent {
+  private _populateDrivers(data: IDrivers): DriverTeamRaceContent {
     const ul = document.createElement('ul');
     ul.id = 'drivers-list';
     data.drivers.forEach((driver) => {
@@ -67,19 +67,20 @@ export class Drivers implements PageClass {
     raceRowHeader.role = 'row';
     raceRowHeader.innerHTML = `<div role="columnheader" class="flex-cell">Race</div><div role="columnheader" class="flex-cell">Date</div><div role="columnheader" class="flex-cell">Pos</div>`;
     flexTable.appendChild(raceRowHeader);
-    data.results.forEach((r) => {
+    data.results.forEach((r, i) => {
       const { race, result } = r;
       const raceRow = document.createElement('div');
       raceRow.className = 'flex-row';
       raceRow.role = 'row';
-      raceRow.innerHTML = `<div role="cell" class="flex-cell">${this._handleRaceNames(race.name)}</div><div role="cell" class="flex-cell">${this._convertDate(race.date)}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
+      i % 2 === 0 && raceRow.classList.add('alt');
+      raceRow.innerHTML = `<div role="cell" class="flex-cell"><a href="#races/${race.raceId}">${this._handleRaceNames(race.name)}</a></div><div role="cell" class="flex-cell">${this._convertDate(race.date)}</div><div role="cell" class="flex-cell">${this._handlePosition(result.finishingPosition)}</div>`;
       flexTable.appendChild(raceRow);
     })
     results.appendChild(flexTable);
     return results;
   }
   
-  private _populateDriver(data: Driver): DriverTeamContent {
+  private _populateDriver(data: Driver): DriverTeamRaceContent {
     const { name, surname, nationality, birthday, number } = data.driver;
     const { teamName, teamNationality, teamId } = data.team;
     const imgName = this._handleDriverEdgeCases(name, surname);
@@ -95,6 +96,7 @@ export class Drivers implements PageClass {
       {Nationality: nationality},
       {'Date of birth': birthday},
       { 'Car number': number },
+      { 'Championship points': 'N/A' }, // TODO: Update when API supports it
       { Team: `<a href="#teams/${teamId}">${teamName}</a>` },
       { 'Team nationality': teamNationality },
     ];
@@ -111,7 +113,7 @@ export class Drivers implements PageClass {
     return { title: `${name} ${surname}`, desc: '', elem: driver };
   }
   
-  private async _populateContent(): Promise<DriverTeamContent> {
+  private async _populateContent(): Promise<DriverTeamRaceContent> {
     const path = `/drivers${this._param ? `/${this._param}` : ''}`;
     const data: IDrivers | Driver = await fetchData.get(path, false, true);
     return 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);

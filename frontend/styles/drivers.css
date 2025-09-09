@@ -71,12 +71,21 @@
         h2 {
             text-align: center;
         }
+        .alt {
+            background-color: var(--container-bg-color);
+        }
         #flex-table {
             display: flex;
             flex-direction: column;
             border: 1px solid #ccc;
             border-radius: 6px;
             overflow: hidden;
+        }
+        a {
+            color: var(--text-color);
+        }
+        a:hover {
+            font-style: italic;
         }
         .flex-row {
             display: flex;

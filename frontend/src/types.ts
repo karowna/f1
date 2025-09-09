@@ -34,7 +34,7 @@ interface Schedule {
   "time": string | null;
 }
 
-export interface DriverTeamContent {
+export interface DriverTeamRaceContent {
   title: string;
   desc: string;
   elem: HTMLElement;

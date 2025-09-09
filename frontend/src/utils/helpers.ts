@@ -38,3 +38,10 @@ export function handleCustomContent(parentElem: HTMLElement, type: 'driver' | 't
     parentElem.appendChild(loginPrompt);
   }
 }
+
+export function handleRaceNames(name: string): string {
+  if (name.includes('Italy')) {
+    [name] = name.split(' e ');
+  }
+  return name.replace('2025', '');
+}

@@ -1,0 +1,79 @@
+@import "vars.css";
+
+#races {
+    max-width: 1200px;
+    margin: 0 auto;
+    a {
+        color: var(--text-color);
+    }
+    a:hover {
+        font-style: italic;
+    }
+    .alt {
+        background-color: var(--container-bg-color);
+    }
+    #flex-table {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .flex-row {
+        display: flex;
+    }
+    .flex-cell {
+        flex: 1;
+        padding: .75rem 1rem;
+        border-bottom: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+    }
+    .flex-row:last-child .flex-cell {
+        border-bottom: none;
+    }
+    .flex-cell:last-child {
+        border-right: none;
+    }
+    .header {
+        font-weight: bold;
+    }
+    .flex-cell:nth-child(1) {
+        flex: 1.5 1 0;
+    }
+    .flex-cell:nth-child(2) {
+        flex: 1 1 0;
+    }
+    .flex-cell:nth-child(3) {
+        flex: 1 1 0;
+    }
+    .flex-cell:nth-child(4) {
+        flex: 0.5 1 0;
+    }
+    #race-details {
+        list-style-type: none;
+        padding: 0;
+        margin: 0 auto;
+        width: max-content;
+        line-height: 1.5rem;
+        span {
+            font-weight: bold;
+        }
+        a {
+            color: var(--text-color);
+        }
+        a:hover {
+            font-style: italic;
+        }
+    }
+}
+
+@media (max-width: 800px) {
+    #races {
+        .flex-cell:nth-child(1) {
+            flex: 1 1 0;
+        }
+        .flex-cell:nth-child(4) {
+            flex: 1 1 0;
+        }
+    }
+}
