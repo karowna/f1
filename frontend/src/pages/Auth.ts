@@ -72,7 +72,8 @@ export class Auth implements PageClass {
         const password = (document.getElementById('password-1') as HTMLInputElement)?.value;
         if (this._param === 'logout') {
           console.log('[Auth] - Logging out...');
-          // TODO: add request to logout?
+          await fetchData.get('/auth/logout', fetchData.loggedIn);
+          fetchData.token = null;
           this._handleAction('Login/Signup', '#auth/login', 'Logged out', 'See you again soon!', null);
         } else if (this._param === 'signup') {
           console.log('[Auth] - Signing up...');
@@ -105,7 +106,7 @@ export class Auth implements PageClass {
     let inputs = '';
     let formType = '';
     let msgText = '';
-    if (fetchData.token || this._param === 'logout') {
+    if (fetchData.loggedIn || this._param === 'logout') {
       formType = 'Log out';
     } else if (this._param === 'signup') {
       inputs = this._populateSignup();

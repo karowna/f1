@@ -20,7 +20,7 @@ async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void>
 }
 
 export function handleCustomContent(parentElem: HTMLElement, type: 'driver' | 'team', id: string): void {
-  if (fetchData.token) {
+  if (fetchData.loggedIn) {
     const favouriteP = document.createElement('p');
     const fav = true; // TODO: Placeholder for actual favourite check
     favouriteP.id = 'favourite-text';

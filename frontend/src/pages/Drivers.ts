@@ -102,7 +102,7 @@ export class Drivers implements PageClass {
     appendListItems(details, allLi);
     handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
-    if (fetchData.token) {
+    if (fetchData.loggedIn) {
       driver.appendChild(this._populateDriverForAuthenticatedUser(data));
     }
     return { title: `${name} ${surname}`, desc: '', elem: driver };
@@ -113,7 +113,7 @@ export class Drivers implements PageClass {
     try {
       console.log(`[Drivers] - Fetching ${this._param ? `details for driver ID ${this._param}` : 'Fetching list of drivers'}...`);
       const path = `/drivers${this._param ? `/${this._param}` : ''}`;
-      const data: IDrivers | Driver = await fetchData.get(path, false, true);
+      const data: IDrivers | Driver = await fetchData.get(path, fetchData.loggedIn, true);
       const uiData = 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);
       document.getElementById('drivers-title')!.innerHTML = uiData.title;
       document.getElementById('drivers-desc')!.innerHTML = uiData.desc;

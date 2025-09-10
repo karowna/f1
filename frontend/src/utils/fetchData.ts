@@ -4,14 +4,13 @@ class FetchData {
   private _token: string | null = null;
   private _cache: { [key:string]: { data: unknown, expiry: number} } = {};
   
-  private _sendRequest(method: HTTPMethod, path: string, token: boolean, data: unknown): Promise<Response> {
-    console.log(`Sending ${method} request to ${path} with token: ${token} and data:`, data);
+  private _sendRequest(method: HTTPMethod, path: string, useToken: boolean, data: unknown): Promise<Response> {
+    console.log(`Sending ${method} request to ${path} with token: ${useToken} and data:`, data);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    token && headers.append('Authorization', `Bearer ${this._token}`);
+    useToken && headers.append('Authorization', `Bearer ${this._token}`);
     const options: { method: HTTPMethod; headers: Headers; body?: string } = { method, headers};
     data && (options.body = JSON.stringify(data));
     console.log('Request options:', options);
-    // return fetch(`http://localhost:3000/api${path}`, options);
     // return fetch(`https://hnxfgutvgswxxvzctxto.supabase.co/functions/v1${path}`, options);
     return fetch(`http://localhost:3000${path}`, options);
   }
@@ -24,33 +23,37 @@ class FetchData {
     return this._token;
   }
   
-  public async get<T>(path: string, token = false, cache = false): Promise<T> {
+  public get loggedIn(): boolean {
+    return !!this._token;
+  }
+  
+  public async get<T>(path: string, loggedIn = false, cache = false): Promise<T> {
     if (cache) {
       const cached = this._cache[path];
       console.log('cached', cached);
       if (cached && (Date.now() < cached.expiry)) return cached.data as T;
     }
-    const response = await this._sendRequest(HTTPMethod.GET, path, token, null);
+    const response = await this._sendRequest(HTTPMethod.GET, path, loggedIn, null);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const data = await response.json();
     if (cache) this._cache[path] = { data, expiry: Date.now() + 15 * 60 * 1000 }; // Cache for 15 minutes
     return data;
   }
 
-  public async post<T>(path: string, data: unknown, token = false): Promise<T> {
-    const response = await this._sendRequest(HTTPMethod.POST, path, token, data);
+  public async post<T>(path: string, data: unknown, loggedIn = false): Promise<T> {
+    const response = await this._sendRequest(HTTPMethod.POST, path, loggedIn, data);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     return response.json();
   }
 
-  public async put<T>(path: string, data: unknown, token = false): Promise<T> {
-    const response = await this._sendRequest(HTTPMethod.PUT, path, token, data);
+  public async put<T>(path: string, data: unknown, loggedIn = false): Promise<T> {
+    const response = await this._sendRequest(HTTPMethod.PUT, path, loggedIn, data);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     return response.json();
   }
 
-  public async delete<T>(path: string, token = false): Promise<T> {
-    const response = await this._sendRequest(HTTPMethod.DELETE, path, token, null);
+  public async delete<T>(path: string, loggedIn = false): Promise<T> {
+    const response = await this._sendRequest(HTTPMethod.DELETE, path, loggedIn, null);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     return response.json();
   }

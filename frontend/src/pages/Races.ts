@@ -47,7 +47,7 @@ export class Races implements PageClass {
   }
 
   private async _populateContent(): Promise<DriverTeamRaceContent> {
-    const data: IRaces = await fetchData.get('/races', false, true);
+    const data: IRaces = await fetchData.get('/races', fetchData.loggedIn, true);
     return this._param ? this._populateRace(data) : this._populateRacesTable(data);
   }
   

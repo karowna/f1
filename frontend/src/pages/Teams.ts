@@ -54,7 +54,7 @@ export class Teams implements PageClass {
   
   private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
     const path = `/teams${this._param ? `/${this._param}` : ''}`;
-    const data: ITeams | Team = await fetchData.get(path, false, true);
+    const data: ITeams | Team = await fetchData.get(path, fetchData.loggedIn, true);
     return 'teams' in data ? this._populateTeams(data) : this._populateTeam(data);
   }
 
