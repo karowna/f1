@@ -34,6 +34,13 @@ interface Schedule {
   "time": string | null;
 }
 
+export interface Comment {
+  id: string;
+  userId: string;
+  content: string;
+  timestamp: string;
+}
+
 export interface DriverTeamRaceContent {
   title: string;
   desc: string;

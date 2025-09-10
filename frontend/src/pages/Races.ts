@@ -1,4 +1,4 @@
-import { DriverTeamRaceContent, PageClass, Races as IRaces} from '../types';
+import {Comment, DriverTeamRaceContent, PageClass, Races as IRaces} from '../types';
 import {appendListItems, fetchData, handleRaceNames, getFlexTable, getFlexTableRow, setErrorMsg} from "../utils";
 
 export class Races implements PageClass {
@@ -25,9 +25,12 @@ export class Races implements PageClass {
     return {title, desc: '', elem: flexTable}
   }
   
-  private _populateRace(data: IRaces): DriverTeamRaceContent {
+  private async _populateRace(data: IRaces): Promise<DriverTeamRaceContent> {
+    const comments = await fetchData.get<Comment[]>(`/comments/${this._param}`, fetchData.loggedIn, false);
+    console.log('>>>>>', comments);
     const race = data.races.find((r) => r.raceId === this._param);
     if (race) {
+      const container = document.createElement('div');
       const details = document.createElement('ul');
       details.id = 'race-details';
       const winnerHTML = race.winner ? `<a href="#drivers/${race.winner?.driverId}">${race.winner?.name} ${race.winner?.surname}</a>` : 'N/A';
@@ -40,8 +43,90 @@ export class Races implements PageClass {
         { 'Team winner': teamWinnerHTML },
       ];
       appendListItems(details, allLi);
+      container.append(details);
+      const commentSection = document.createElement('section');
+      commentSection.id = 'comments-section';
+      const h2 = document.createElement('h2');
+      h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
+      commentSection.appendChild(h2);
+      /*
+      <dialog id="modal">
+  <h2>Example Modal</h2>
+  <p>This is a native HTML dialog element.</p>
+  <button id="close">Close</button>
+</dialog>
+       */
+      const dialog = document.createElement('dialog');
+      dialog.id = 'modal';
+      const dialogTitle = document.createElement('h2');
+      dialogTitle.innerText = 'Edit Comment';
+      dialog.appendChild(dialogTitle);
+      const dialogInput = document.createElement('textarea');
+      dialogInput.id = 'modal-input';
+      dialogInput.rows = 4;
+      dialogInput.maxLength = 500;
+      dialogInput.placeholder = 'Edit your comment here... (max 500 characters)';
+      dialog.appendChild(dialogInput);
+      const closeButton = document.createElement('button');
+      closeButton.id = 'close';
+      closeButton.innerText = 'Close';
+      closeButton.addEventListener('click', () => {
+        dialog.close();
+      });
+      dialog.appendChild(closeButton);
+      container.appendChild(dialog);
+      comments.forEach((c) => {
+        const p = document.createElement('p');
+        p.id = c.id;
+        p.dataset.id = c.userId;
+        let content = c.content;
+        content += `<p class="timestamp">${c.timestamp}</p>`;
+        p.innerHTML = content;
+        if (fetchData.userId === c.userId) {
+          p.className = 'own-comment';
+          const button = document.createElement('button');
+          button.addEventListener('click', async (e) => {
+            const modal = document.getElementById("modal")! as HTMLDialogElement;
+            modal.showModal()
+            // document.getElementById("close").addEventListener("click", () => modal.close());
+            // await fetchData.put(`/comments/${this._param}`, {id: p.id, content: p.innerHTML}, fetchData.loggedIn);
+            // window.location.reload();
+          });
+          button.innerText = '✏️';
+          button.className = 'edit-comment';
+          button.title = 'Edit comment';
+          p.appendChild(button);
+          // content += `<p><span class="edit-comment" title="Edit comment">✏️</span>&nbsp;&nbsp;&nbsp;<span class="delete-comment" title="Delete comment">🗑️</span></p>`;
+        } else {
+          p.className = 'comment';
+        }
+        // p.innerHTML = content;
+        commentSection.appendChild(p);
+      });
+      if (fetchData.loggedIn) {
+        const form = document.createElement('form');
+        form.id = 'comment-form';
+        commentSection.appendChild(form);
+        const textarea = document.createElement('textarea');
+        textarea.id = 'comment-input';
+        textarea.rows = 4;
+        textarea.maxLength = 500;
+        textarea.placeholder = 'Write your comment here... (max 500 characters)';
+        commentSection.appendChild(textarea);
+        const button = document.createElement('button');
+        button.addEventListener('click', async (e) => {
+          // e.preventDefault();
+          const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
+          if (!content) return;
+          await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
+          window.location.reload();
+        });
+        button.innerText = 'Submit';
+        commentSection.appendChild(button);
+      }
+      container.appendChild(commentSection);
       const title = handleRaceNames(race.raceName);
-      return {title, desc: '', elem: details}
+      return {title, desc: '', elem: container}
     }
     return {title: 'Race Not Found', desc: '', elem: document.createElement('div')}
   }

@@ -65,6 +65,57 @@
             font-style: italic;
         }
     }
+    #comments-section {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: var(--container-bg-color);
+        border-radius: var(--radius);
+        h2 {
+            text-align: center;
+        }
+        #comments-list {
+            margin-bottom: 1rem;
+        }
+        .comment, .own-comment {
+            background: var(--bg-color);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            width: 80%;
+            p:last-child {
+                margin-bottom: 0;
+                font-size: 0.7rem;
+            }
+        }
+        .own-comment {
+            margin-left: 6rem;
+            background-color: rgba(0, 100, 100, 0.3);
+        }
+        textarea {
+            width: 97%;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: var(--radius);
+            background: var(--bg-color);
+        }
+        button {
+            background-color: var(--bg-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.5rem 1rem;
+            font-size: 110%;
+            cursor: pointer;
+            display: block;
+            margin: 0.5rem auto;
+        }
+        .edit-comment, .delete-comment {
+            cursor: pointer;
+        }
+    }
 }
 
 @media (max-width: 800px) {

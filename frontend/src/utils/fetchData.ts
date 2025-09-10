@@ -1,7 +1,8 @@
 import { HTTPMethod } from '../enums';
 
 class FetchData {
-  private _token: string | null = null;
+  private _token: string | null = 'null';
+  private _userId: string | null = '1234';
   private _cache: { [key:string]: { data: unknown, expiry: number} } = {};
   
   private _sendRequest(method: HTTPMethod, path: string, useToken: boolean, data: unknown): Promise<Response> {
@@ -21,6 +22,14 @@ class FetchData {
   
   public get token(): string | null {
     return this._token;
+  }
+
+  public set userId(userId: string | null) {
+    this._userId = userId;
+  }
+
+  public get userId(): string | null {
+    return this._userId;
   }
   
   public get loggedIn(): boolean {

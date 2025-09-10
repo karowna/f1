@@ -52,9 +52,10 @@ export class Auth implements PageClass {
     return { inputs: inputs, valid: !errorMsg };
   }
   
-  private _handleAction(linkHTML: string, linkHref: string, title: string, msg: string, token: string | null): void {
+  private _handleAction(linkHTML: string, linkHref: string, title: string, msg: string, token: string | null, userId = ''): void {
     const authLink = document.getElementById('navbar')!.getElementsByTagName('nav')[0].children[4] as HTMLAnchorElement;
     fetchData.token = token;
+    fetchData.userId = userId;
     authLink.innerHTML = linkHTML;
     authLink.href = linkHref;
     document.getElementById('auth-title')!.innerHTML = title;
@@ -77,13 +78,13 @@ export class Auth implements PageClass {
           this._handleAction('Login/Signup', '#auth/login', 'Logged out', 'See you again soon!', null);
         } else if (this._param === 'signup') {
           console.log('[Auth] - Signing up...');
-          await fetchData.post<{token: string}>('/auth/signup', { email, password });
+          await fetchData.post('/auth/signup', { email, password });
           this._handleAction('Login/Signup', '#auth/login', 'Signed up', 'Please verify your email to log in.', null);
         } else if (!this._param || this._param === 'login') {
           console.log('[Auth] - Logging in...');
-          const loginReq = await fetchData.post<{token: string}>('/auth/login', { email, password });
+          const {token, userId} = await fetchData.post<{token: string, userId: string}>('/auth/login', { email, password });
           const msg = 'Want to leave? <a href="#auth/logout">Log out.</a>';
-          this._handleAction('Logout', '#auth/logout', 'Logged in', msg, loginReq.token);
+          this._handleAction('Logout', '#auth/logout', 'Logged in', msg, token, userId);
         }
       } catch (error) {
         console.error(`[Auth] - Error during auth request: ${error}`);
