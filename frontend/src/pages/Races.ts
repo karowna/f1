@@ -3,16 +3,17 @@ import {appendListItems, fetchData, handleRaceNames, getFlexTable, getFlexTableR
 
 export class Races implements PageClass {
   private readonly _param: string;
+  private _data: IRaces | null = null;
 
   constructor(param: string) {
     this._param = param;
     console.log('[Races] - Initialised Races class');
   }
   
-  private _populateRacesTable(data: IRaces): DriverTeamRaceContent {
-    const title = `All ${data.total} races of the ${data.season} season`;
+  private _populateRacesTable(): DriverTeamRaceContent {
+    const title = `All ${this._data?.total} races of the ${this._data?.season} season`;
     const flexTable = getFlexTable(['Race', 'Winner', 'Team', 'Date']);
-    data.races.forEach((r, i) => {
+    this._data?.races.forEach((r, i) => {
       const { raceId, raceName, winner, teamWinner, schedule } = r;
       const content = [
         `<a href="#races/${raceId}">${handleRaceNames(raceName)}</a>`,
@@ -34,19 +35,50 @@ export class Races implements PageClass {
     return textarea;
   }
   
+  private _getBtn(id: string, text: string): Element {
+    const btn = document.createElement('button');
+    btn.id = id;
+    btn.innerText = text;
+    return btn;
+  }
+
+  private _getSpan(text: string, className: string, title: string): Element {
+    const span = document.createElement('span');
+    span.innerText = text;
+    span.className = className;
+    span.title = title;
+    return span;
+  }
+
+  private _getDialog(): HTMLDialogElement {
+    const dialog = document.createElement('dialog');
+    dialog.id = 'modal';
+    const dialogTitle = document.createElement('h2');
+    dialogTitle.innerText = 'Edit Comment';
+    dialog.appendChild(dialogTitle);
+    dialog.appendChild(this._getTextarea('modal-input'));
+    return dialog;
+  }
+  
+  private async _updateContent(): Promise<void> {
+    document.getElementById('race-container')!.remove();
+    const content = await this._populateRace();
+    document.getElementById('races-desc')!.innerHTML = content.desc;
+    await this.loaded()
+  }
+  
   private _populateCommentTextArea(commentSection: HTMLElement): void {
     const form = document.createElement('form');
     form.id = 'comment-form';
     commentSection.appendChild(form);
     commentSection.appendChild(this._getTextarea('comment-input'));
-    const button = document.createElement('button');
+    const button = this._getBtn('submit', 'Submit');
     button.addEventListener('click', async (e) => {
       const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
       if (!content) return;
       await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
-      window.location.reload();
+      await this._updateContent();
     });
-    button.innerText = 'Submit';
     commentSection.appendChild(button);
   }
   
@@ -54,28 +86,17 @@ export class Races implements PageClass {
     const commentSection = document.createElement('section');
     commentSection.id = 'comments-section';
     const h2 = document.createElement('h2');
-    h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
+    h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : '<a href="#auth/login">Log in</a> to leave a comment';
     commentSection.appendChild(h2);
-    const dialog = document.createElement('dialog');
-    dialog.id = 'modal';
-    const dialogTitle = document.createElement('h2');
-    dialogTitle.innerText = 'Edit Comment';
-    dialog.appendChild(dialogTitle);
-    // const dialogInput = document.createElement('textarea');
-    // dialogInput.id = 'modal-input';
-    // dialogInput.rows = 4;
-    // dialogInput.maxLength = 500;
-    dialog.appendChild(this._getTextarea('modal-input'));
-    const submitButton = document.createElement('button');
-    submitButton.id = 'modal-submit';
-    submitButton.innerText = 'Submit';
+    
+    const dialog = this._getDialog();
+    const submitButton = this._getBtn('modal-submit', 'Submit');
     dialog.appendChild(submitButton);
     container.appendChild(dialog);
-    const closeButton = document.createElement('button');
-    closeButton.id = 'close';
-    closeButton.innerText = 'Close';
+    const closeButton = this._getBtn('close', 'Close');
     closeButton.addEventListener('click', () => dialog.close());
     dialog.appendChild(closeButton);
+    
     comments.forEach((c) => {
       const div = document.createElement('div');
       div.id = c.id;
@@ -83,13 +104,11 @@ export class Races implements PageClass {
       let content = c.content;
       content += `<p class="timestamp">${new Date(c.timestamp).toLocaleString()}</p>`;
       div.innerHTML = content;
+      
       if (fetchData.userId === c.userId) {
         div.className = 'own-comment';
         const p = document.createElement('p');
-        const editMsg = document.createElement('span');
-        editMsg.innerText = '✏️';
-        editMsg.className = 'edit-comment';
-        editMsg.title = 'Edit comment';
+        const editMsg = this._getSpan('✏️', 'edit-comment', 'Edit comment');
         editMsg.addEventListener('click', async (e) => {
           const modal = document.getElementById("modal")! as HTMLDialogElement;
           modal.showModal();
@@ -99,18 +118,17 @@ export class Races implements PageClass {
             const content = (document.getElementById('modal-input') as HTMLTextAreaElement).value;
             if (!content) return;
             await fetchData.put(`/comments/${this._param}`, {content, userId: fetchData.userId, id: div.id}, fetchData.loggedIn);
-            window.location.reload();
+            await this._updateContent();
           });
         });
         p.appendChild(editMsg);
-        const deleteMsg = document.createElement('span');
-        deleteMsg.innerText = '🗑️';
-        deleteMsg.className = 'delete-comment';
-        deleteMsg.title = 'Delete comment';
+        const deleteMsg = this._getSpan('🗑️', 'delete-comment', 'Delete comment');
+        
         deleteMsg.addEventListener('click', async (e) => {
           await fetchData.delete(`/comments/${this._param}/${div.id}`, fetchData.loggedIn);
-          window.location.reload();
+          await this._updateContent();
         });
+        
         p.appendChild(deleteMsg);
         div.appendChild(p);
       } else {
@@ -124,11 +142,12 @@ export class Races implements PageClass {
     container.appendChild(commentSection);
   }
   
-  private async _populateRace(data: IRaces): Promise<DriverTeamRaceContent> {
+  private async _populateRace(): Promise<DriverTeamRaceContent> {
     const comments = await fetchData.get<Comment[]>(`/comments/${this._param}`, fetchData.loggedIn, false);
-    const race = data.races.find((r) => r.raceId === this._param);
+    const race = this._data?.races.find((r) => r.raceId === this._param);
     if (race) {
       const container = document.createElement('div');
+      container.id = 'race-container';
       const details = document.createElement('ul');
       details.id = 'race-details';
       const winnerHTML = race.winner ? `<a href="#drivers/${race.winner?.driverId}">${race.winner?.name} ${race.winner?.surname}</a>` : 'N/A';
@@ -143,95 +162,6 @@ export class Races implements PageClass {
       appendListItems(details, allLi);
       container.append(details);
       this._populateComments(container, comments);
-      // const commentSection = document.createElement('section');
-      // commentSection.id = 'comments-section';
-      // const h2 = document.createElement('h2');
-      // h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
-      // commentSection.appendChild(h2);
-      // const dialog = document.createElement('dialog');
-      // dialog.id = 'modal';
-      // const dialogTitle = document.createElement('h2');
-      // dialogTitle.innerText = 'Edit Comment';
-      // dialog.appendChild(dialogTitle);
-      // const dialogInput = document.createElement('textarea');
-      // dialogInput.id = 'modal-input';
-      // dialogInput.rows = 4;
-      // dialogInput.maxLength = 500;
-      // dialogInput.placeholder = 'Edit your comment here... (max 500 characters)';
-      // dialog.appendChild(dialogInput);
-      // const submitButton = document.createElement('button');
-      // submitButton.id = 'modal-submit';
-      // submitButton.innerText = 'Submit';
-      // dialog.appendChild(submitButton);
-      // container.appendChild(dialog);
-      // const closeButton = document.createElement('button');
-      // closeButton.id = 'close';
-      // closeButton.innerText = 'Close';
-      // closeButton.addEventListener('click', () => dialog.close());
-      // dialog.appendChild(closeButton);
-      // comments.forEach((c) => {
-      //   const div = document.createElement('div');
-      //   div.id = c.id;
-      //   div.dataset.id = c.userId;
-      //   let content = c.content;
-      //   content += `<p class="timestamp">${new Date(c.timestamp).toLocaleString()}</p>`;
-      //   div.innerHTML = content;
-      //   if (fetchData.userId === c.userId) {
-      //     div.className = 'own-comment';
-      //     const p = document.createElement('p');
-      //     const editMsg = document.createElement('span');
-      //     editMsg.innerText = '✏️';
-      //     editMsg.className = 'edit-comment';
-      //     editMsg.title = 'Edit comment';
-      //     editMsg.addEventListener('click', async (e) => {
-      //       const modal = document.getElementById("modal")! as HTMLDialogElement;
-      //       modal.showModal();
-      //       const ta = document.getElementById('modal-input')! as HTMLTextAreaElement;
-      //       ta.value = document.getElementById(div.id)?.innerHTML.replace(/<p.*/, '') ?? '';
-      //       submitButton.addEventListener('click', async () => {
-      //         const content = (document.getElementById('modal-input') as HTMLTextAreaElement).value;
-      //         if (!content) return;
-      //         await fetchData.put(`/comments/${this._param}`, {content, userId: fetchData.userId, id: div.id}, fetchData.loggedIn);
-      //         window.location.reload();
-      //       });
-      //     });
-      //     p.appendChild(editMsg);
-      //     const deleteMsg = document.createElement('span');
-      //     deleteMsg.innerText = '🗑️';
-      //     deleteMsg.className = 'delete-comment';
-      //     deleteMsg.title = 'Delete comment';
-      //     deleteMsg.addEventListener('click', async (e) => {
-      //       await fetchData.delete(`/comments/${this._param}/${div.id}`, fetchData.loggedIn);
-      //       window.location.reload();
-      //     });
-      //     p.appendChild(deleteMsg);
-      //     div.appendChild(p);
-      //   } else {
-      //     div.className = 'comment';
-      //   }
-      //   commentSection.appendChild(div);
-      // });
-      // if (fetchData.loggedIn) {
-      //   const form = document.createElement('form');
-      //   form.id = 'comment-form';
-      //   commentSection.appendChild(form);
-      //   const textarea = document.createElement('textarea');
-      //   textarea.id = 'comment-input';
-      //   textarea.rows = 4;
-      //   textarea.maxLength = 500;
-      //   textarea.placeholder = 'Write your comment here... (max 500 characters)';
-      //   commentSection.appendChild(textarea);
-      //   const button = document.createElement('button');
-      //   button.addEventListener('click', async (e) => {
-      //     const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
-      //     if (!content) return;
-      //     await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
-      //     window.location.reload();
-      //   });
-      //   button.innerText = 'Submit';
-      //   commentSection.appendChild(button);
-      // }
-      // container.appendChild(commentSection);
       const title = handleRaceNames(race.raceName);
       return {title, desc: '', elem: container}
     }
@@ -239,8 +169,8 @@ export class Races implements PageClass {
   }
 
   private async _populateContent(): Promise<DriverTeamRaceContent> {
-    const data: IRaces = await fetchData.get('/races', fetchData.loggedIn, true);
-    return this._param ? this._populateRace(data) : this._populateRacesTable(data);
+    this._data = await fetchData.get('/races', fetchData.loggedIn, true);
+    return this._param ? this._populateRace() : this._populateRacesTable();
   }
   
   public async loaded(): Promise<void> {

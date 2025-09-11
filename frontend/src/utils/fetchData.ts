@@ -1,8 +1,8 @@
 import { HTTPMethod } from '../enums';
 
 class FetchData {
-  private _token: string | null = 'null';
-  private _userId: string | null = '1234';
+  private _token: string | null = null;
+  private _userId: string | null = null;
   private _cache: { [key:string]: { data: unknown, expiry: number} } = {};
   
   private _sendRequest(method: HTTPMethod, path: string, useToken: boolean, data: unknown): Promise<Response> {

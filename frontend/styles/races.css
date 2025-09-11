@@ -65,6 +65,43 @@
             font-style: italic;
         }
     }
+    
+    dialog {
+        width: 25%;
+        margin: auto;
+        border-radius: var(--radius);
+        text-align: center;
+        background-color: var(--container-bg-color);
+        textarea {
+            width: 94%;
+        }
+        button {
+            display: inline;
+            margin: 0.5rem 10px;
+        }
+    }
+
+    textarea {
+        width: 97%;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border-radius: var(--radius);
+        background: var(--bg-color);
+        resize: none;
+    }
+    button {
+        background-color: var(--bg-color);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: var(--radius);
+        padding: 0.5rem 1rem;
+        font-size: 110%;
+        cursor: pointer;
+        display: block;
+        margin: 0.5rem auto;
+    }
+    
     #comments-section {
         max-width: 600px;
         margin: 2rem auto;
@@ -84,36 +121,23 @@
             border-radius: 6px;
             border: 1px solid #ddd;
             width: 80%;
-            p:last-child {
+            p:first-child {
                 margin-bottom: 0;
                 font-size: 0.7rem;
+            }
+            p:last-child {
+                margin: 10px 0 0 0;
             }
         }
         .own-comment {
             margin-left: 6rem;
             background-color: rgba(0, 100, 100, 0.3);
         }
-        textarea {
-            width: 97%;
-            margin: 0.5rem 0;
-            padding: 0.5rem;
-            font-size: 1rem;
-            border-radius: var(--radius);
-            background: var(--bg-color);
-        }
-        button {
-            background-color: var(--bg-color);
-            color: var(--button-text-color);
-            border: none;
-            border-radius: var(--radius);
-            padding: 0.5rem 1rem;
-            font-size: 110%;
-            cursor: pointer;
-            display: block;
-            margin: 0.5rem auto;
-        }
         .edit-comment, .delete-comment {
             cursor: pointer;
+        }
+        span:last-child {
+            margin-left: 10px;
         }
     }
 }
@@ -125,6 +149,9 @@
         }
         .flex-cell:nth-child(4) {
             flex: 1 1 0;
+        }
+        .comment, .own-comment {
+            width: auto !important;
         }
     }
 }
