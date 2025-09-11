@@ -25,9 +25,107 @@ export class Races implements PageClass {
     return {title, desc: '', elem: flexTable}
   }
   
+  private _getTextarea(id: string): HTMLElement {
+    const textarea = document.createElement('textarea');
+    textarea.id = id;
+    textarea.rows = 4;
+    textarea.maxLength = 500;
+    textarea.placeholder = 'Write your comment here... (max 500 characters)';
+    return textarea;
+  }
+  
+  private _populateCommentTextArea(commentSection: HTMLElement): void {
+    const form = document.createElement('form');
+    form.id = 'comment-form';
+    commentSection.appendChild(form);
+    commentSection.appendChild(this._getTextarea('comment-input'));
+    const button = document.createElement('button');
+    button.addEventListener('click', async (e) => {
+      const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
+      if (!content) return;
+      await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
+      window.location.reload();
+    });
+    button.innerText = 'Submit';
+    commentSection.appendChild(button);
+  }
+  
+  private _populateComments(container: HTMLElement, comments: Comment[]): void {
+    const commentSection = document.createElement('section');
+    commentSection.id = 'comments-section';
+    const h2 = document.createElement('h2');
+    h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
+    commentSection.appendChild(h2);
+    const dialog = document.createElement('dialog');
+    dialog.id = 'modal';
+    const dialogTitle = document.createElement('h2');
+    dialogTitle.innerText = 'Edit Comment';
+    dialog.appendChild(dialogTitle);
+    // const dialogInput = document.createElement('textarea');
+    // dialogInput.id = 'modal-input';
+    // dialogInput.rows = 4;
+    // dialogInput.maxLength = 500;
+    dialog.appendChild(this._getTextarea('modal-input'));
+    const submitButton = document.createElement('button');
+    submitButton.id = 'modal-submit';
+    submitButton.innerText = 'Submit';
+    dialog.appendChild(submitButton);
+    container.appendChild(dialog);
+    const closeButton = document.createElement('button');
+    closeButton.id = 'close';
+    closeButton.innerText = 'Close';
+    closeButton.addEventListener('click', () => dialog.close());
+    dialog.appendChild(closeButton);
+    comments.forEach((c) => {
+      const div = document.createElement('div');
+      div.id = c.id;
+      div.dataset.id = c.userId;
+      let content = c.content;
+      content += `<p class="timestamp">${new Date(c.timestamp).toLocaleString()}</p>`;
+      div.innerHTML = content;
+      if (fetchData.userId === c.userId) {
+        div.className = 'own-comment';
+        const p = document.createElement('p');
+        const editMsg = document.createElement('span');
+        editMsg.innerText = '✏️';
+        editMsg.className = 'edit-comment';
+        editMsg.title = 'Edit comment';
+        editMsg.addEventListener('click', async (e) => {
+          const modal = document.getElementById("modal")! as HTMLDialogElement;
+          modal.showModal();
+          const ta = document.getElementById('modal-input')! as HTMLTextAreaElement;
+          ta.value = document.getElementById(div.id)?.innerHTML.replace(/<p.*/, '') ?? '';
+          submitButton.addEventListener('click', async () => {
+            const content = (document.getElementById('modal-input') as HTMLTextAreaElement).value;
+            if (!content) return;
+            await fetchData.put(`/comments/${this._param}`, {content, userId: fetchData.userId, id: div.id}, fetchData.loggedIn);
+            window.location.reload();
+          });
+        });
+        p.appendChild(editMsg);
+        const deleteMsg = document.createElement('span');
+        deleteMsg.innerText = '🗑️';
+        deleteMsg.className = 'delete-comment';
+        deleteMsg.title = 'Delete comment';
+        deleteMsg.addEventListener('click', async (e) => {
+          await fetchData.delete(`/comments/${this._param}/${div.id}`, fetchData.loggedIn);
+          window.location.reload();
+        });
+        p.appendChild(deleteMsg);
+        div.appendChild(p);
+      } else {
+        div.className = 'comment';
+      }
+      commentSection.appendChild(div);
+    });
+    if (fetchData.loggedIn) {
+      this._populateCommentTextArea(commentSection);
+    }
+    container.appendChild(commentSection);
+  }
+  
   private async _populateRace(data: IRaces): Promise<DriverTeamRaceContent> {
     const comments = await fetchData.get<Comment[]>(`/comments/${this._param}`, fetchData.loggedIn, false);
-    console.log('>>>>>', comments);
     const race = data.races.find((r) => r.raceId === this._param);
     if (race) {
       const container = document.createElement('div');
@@ -44,87 +142,96 @@ export class Races implements PageClass {
       ];
       appendListItems(details, allLi);
       container.append(details);
-      const commentSection = document.createElement('section');
-      commentSection.id = 'comments-section';
-      const h2 = document.createElement('h2');
-      h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
-      commentSection.appendChild(h2);
-      /*
-      <dialog id="modal">
-  <h2>Example Modal</h2>
-  <p>This is a native HTML dialog element.</p>
-  <button id="close">Close</button>
-</dialog>
-       */
-      const dialog = document.createElement('dialog');
-      dialog.id = 'modal';
-      const dialogTitle = document.createElement('h2');
-      dialogTitle.innerText = 'Edit Comment';
-      dialog.appendChild(dialogTitle);
-      const dialogInput = document.createElement('textarea');
-      dialogInput.id = 'modal-input';
-      dialogInput.rows = 4;
-      dialogInput.maxLength = 500;
-      dialogInput.placeholder = 'Edit your comment here... (max 500 characters)';
-      dialog.appendChild(dialogInput);
-      const closeButton = document.createElement('button');
-      closeButton.id = 'close';
-      closeButton.innerText = 'Close';
-      closeButton.addEventListener('click', () => {
-        dialog.close();
-      });
-      dialog.appendChild(closeButton);
-      container.appendChild(dialog);
-      comments.forEach((c) => {
-        const p = document.createElement('p');
-        p.id = c.id;
-        p.dataset.id = c.userId;
-        let content = c.content;
-        content += `<p class="timestamp">${c.timestamp}</p>`;
-        p.innerHTML = content;
-        if (fetchData.userId === c.userId) {
-          p.className = 'own-comment';
-          const button = document.createElement('button');
-          button.addEventListener('click', async (e) => {
-            const modal = document.getElementById("modal")! as HTMLDialogElement;
-            modal.showModal()
-            // document.getElementById("close").addEventListener("click", () => modal.close());
-            // await fetchData.put(`/comments/${this._param}`, {id: p.id, content: p.innerHTML}, fetchData.loggedIn);
-            // window.location.reload();
-          });
-          button.innerText = '✏️';
-          button.className = 'edit-comment';
-          button.title = 'Edit comment';
-          p.appendChild(button);
-          // content += `<p><span class="edit-comment" title="Edit comment">✏️</span>&nbsp;&nbsp;&nbsp;<span class="delete-comment" title="Delete comment">🗑️</span></p>`;
-        } else {
-          p.className = 'comment';
-        }
-        // p.innerHTML = content;
-        commentSection.appendChild(p);
-      });
-      if (fetchData.loggedIn) {
-        const form = document.createElement('form');
-        form.id = 'comment-form';
-        commentSection.appendChild(form);
-        const textarea = document.createElement('textarea');
-        textarea.id = 'comment-input';
-        textarea.rows = 4;
-        textarea.maxLength = 500;
-        textarea.placeholder = 'Write your comment here... (max 500 characters)';
-        commentSection.appendChild(textarea);
-        const button = document.createElement('button');
-        button.addEventListener('click', async (e) => {
-          // e.preventDefault();
-          const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
-          if (!content) return;
-          await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
-          window.location.reload();
-        });
-        button.innerText = 'Submit';
-        commentSection.appendChild(button);
-      }
-      container.appendChild(commentSection);
+      this._populateComments(container, comments);
+      // const commentSection = document.createElement('section');
+      // commentSection.id = 'comments-section';
+      // const h2 = document.createElement('h2');
+      // h2.innerHTML = fetchData.loggedIn ? 'Leave a comment' : 'Log in to leave a comment';
+      // commentSection.appendChild(h2);
+      // const dialog = document.createElement('dialog');
+      // dialog.id = 'modal';
+      // const dialogTitle = document.createElement('h2');
+      // dialogTitle.innerText = 'Edit Comment';
+      // dialog.appendChild(dialogTitle);
+      // const dialogInput = document.createElement('textarea');
+      // dialogInput.id = 'modal-input';
+      // dialogInput.rows = 4;
+      // dialogInput.maxLength = 500;
+      // dialogInput.placeholder = 'Edit your comment here... (max 500 characters)';
+      // dialog.appendChild(dialogInput);
+      // const submitButton = document.createElement('button');
+      // submitButton.id = 'modal-submit';
+      // submitButton.innerText = 'Submit';
+      // dialog.appendChild(submitButton);
+      // container.appendChild(dialog);
+      // const closeButton = document.createElement('button');
+      // closeButton.id = 'close';
+      // closeButton.innerText = 'Close';
+      // closeButton.addEventListener('click', () => dialog.close());
+      // dialog.appendChild(closeButton);
+      // comments.forEach((c) => {
+      //   const div = document.createElement('div');
+      //   div.id = c.id;
+      //   div.dataset.id = c.userId;
+      //   let content = c.content;
+      //   content += `<p class="timestamp">${new Date(c.timestamp).toLocaleString()}</p>`;
+      //   div.innerHTML = content;
+      //   if (fetchData.userId === c.userId) {
+      //     div.className = 'own-comment';
+      //     const p = document.createElement('p');
+      //     const editMsg = document.createElement('span');
+      //     editMsg.innerText = '✏️';
+      //     editMsg.className = 'edit-comment';
+      //     editMsg.title = 'Edit comment';
+      //     editMsg.addEventListener('click', async (e) => {
+      //       const modal = document.getElementById("modal")! as HTMLDialogElement;
+      //       modal.showModal();
+      //       const ta = document.getElementById('modal-input')! as HTMLTextAreaElement;
+      //       ta.value = document.getElementById(div.id)?.innerHTML.replace(/<p.*/, '') ?? '';
+      //       submitButton.addEventListener('click', async () => {
+      //         const content = (document.getElementById('modal-input') as HTMLTextAreaElement).value;
+      //         if (!content) return;
+      //         await fetchData.put(`/comments/${this._param}`, {content, userId: fetchData.userId, id: div.id}, fetchData.loggedIn);
+      //         window.location.reload();
+      //       });
+      //     });
+      //     p.appendChild(editMsg);
+      //     const deleteMsg = document.createElement('span');
+      //     deleteMsg.innerText = '🗑️';
+      //     deleteMsg.className = 'delete-comment';
+      //     deleteMsg.title = 'Delete comment';
+      //     deleteMsg.addEventListener('click', async (e) => {
+      //       await fetchData.delete(`/comments/${this._param}/${div.id}`, fetchData.loggedIn);
+      //       window.location.reload();
+      //     });
+      //     p.appendChild(deleteMsg);
+      //     div.appendChild(p);
+      //   } else {
+      //     div.className = 'comment';
+      //   }
+      //   commentSection.appendChild(div);
+      // });
+      // if (fetchData.loggedIn) {
+      //   const form = document.createElement('form');
+      //   form.id = 'comment-form';
+      //   commentSection.appendChild(form);
+      //   const textarea = document.createElement('textarea');
+      //   textarea.id = 'comment-input';
+      //   textarea.rows = 4;
+      //   textarea.maxLength = 500;
+      //   textarea.placeholder = 'Write your comment here... (max 500 characters)';
+      //   commentSection.appendChild(textarea);
+      //   const button = document.createElement('button');
+      //   button.addEventListener('click', async (e) => {
+      //     const content = (document.getElementById('comment-input') as HTMLTextAreaElement).value;
+      //     if (!content) return;
+      //     await fetchData.post(`/comments/${this._param}`, {content, userId: fetchData.userId}, fetchData.loggedIn);
+      //     window.location.reload();
+      //   });
+      //   button.innerText = 'Submit';
+      //   commentSection.appendChild(button);
+      // }
+      // container.appendChild(commentSection);
       const title = handleRaceNames(race.raceName);
       return {title, desc: '', elem: container}
     }
