@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES6",                        // Transpile to ES6
-    "module": "ESNext",                     // Use ES Modules
-    "outDir": "./dist",                     // Output compiled files into 'dist'
-    "rootDir": "./",                        // Input files are in the current directory
-    "strict": true,                         // Enable strict type-checking
-    "esModuleInterop": true,                // Enable interop with CommonJS modules
-    "skipLibCheck": true,                   // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true
+    "target": "es2021", // Transpile to es2021
+    "module": "ESNext", // Use ES Modules
+    "outDir": "./dist/scripts", // Output compiled files into 'dist/scripts'
+    "strict": true, // Enable strict type-checking
+    "esModuleInterop": true, // Enable interop with CommonJS modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2019", "dom"],
+    "moduleResolution": "bundler"
   },
-  "include": ["./**/*.ts"],                   // Include all TypeScript files
-  "exclude": ["node_modules", "dist"]         // Exclude node_modules and dist directory
+  "include": ["src/**/*.ts"], // Include all TypeScript files
+  "exclude": ["node_modules", "dist"] // Exclude node_modules and dist directory
 }

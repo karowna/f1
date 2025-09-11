@@ -2,11 +2,25 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx http-server dist -p 8080",
-    "build": "npx tsc"
+    "start": "npm run build && tsx ./mock-server/app.ts",
+    "start:mock:server": "tsx watch ./mock-server/app.ts",
+    "build": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm",
+    "dev": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm --watch",
+    "copy": "copyfiles index.html assets/* assets/**/* styles/* dist",
+    "clean": "rimraf dist",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "typescript": "^4.9.5"
+    "@types/express": "^5.0.3",
+    "@vitest/coverage-v8": "^3.2.4",
+    "copyfiles": "^2.4.1",
+    "esbuild": "^0.25.9",
+    "express": "^5.1.0",
+    "jsdom": "^26.1.0",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }

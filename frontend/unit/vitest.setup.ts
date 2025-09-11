@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+document.body.innerHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -27,9 +27,7 @@
 
 <main id="app"></main>
 <div id="overlay" class="hidden">
-    <div id="spinner" role="status" aria-live="polite">
-        <img src="./assets/spinner.png" alt="spinner icon"  aria-hidden="true">
-    </div>
+    <div id="spinner"><img src="./assets/spinner.png" alt="spinner icon"></div>
 </div>
 
 <section id="links-section">
@@ -45,3 +43,4 @@
 <script type="module" src="./scripts/index.js"></script>
 </body>
 </html>
+`;

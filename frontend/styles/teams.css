@@ -1,0 +1,78 @@
+@import "vars.css";
+
+#teams-desc {
+    text-align: center;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+#teams {
+    #teams-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0 auto;
+        width: max-content;
+        a {
+            color: var(--text-color);
+            margin: 10px;
+            text-align: center;
+            font-size: 1.4rem;
+            text-decoration: none;
+            display: block;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+    #team-details {
+        list-style-type: none;
+        padding: 0;
+        margin: 0 auto;
+        width: max-content;
+        line-height: 1.5rem;
+        span {
+            font-weight: bold;
+        }
+        a {
+            color: var(--text-color);
+        }
+        a:hover {
+            font-style: italic;
+        }
+        p {
+            background-color: var(--container-bg-color);
+            font-weight: bold;
+            padding: 15px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        .favourite {
+            color: #E00400;
+        }
+        #favourite-text {
+            cursor: pointer;
+            padding-bottom: 20px;
+        }
+        #favourite-span {
+            font-size: 200%;
+        }
+    }
+    img {
+        width: 15%;
+        height: auto;
+        border-radius: var(--radius);
+        display: block;
+        margin: 0 auto 20px auto;
+        background-color: #FFF;
+        border: 10px solid #FFF;
+    }
+}
+
+@media (max-width: 800px) {
+    #teams {
+        img {
+            width: 30%;
+        }
+    }
+}
