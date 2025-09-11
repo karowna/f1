@@ -37,7 +37,13 @@ app.get("/teams/:id", async (req, res): Promise<void> => {
 });
 app.get("/races", async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current');
-  await _handleResp(resp, res);
+  if (!resp.ok) {
+    res.status(resp.status).json({ error: `Failed to fetch: ${resp.statusText}` });
+    return;
+  }
+  const data = await resp.json();
+  data.video = 'https://v.ftcdn.net/03/94/36/21/240_F_394362119_yK7K9m9mv5EjKAuLCCtAvlUgHQenck6R_ST.mp4';
+  res.status(200).json(data);
 });
 
 // Comments (mocked)

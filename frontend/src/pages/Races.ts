@@ -161,6 +161,10 @@ export class Races implements PageClass {
       ];
       appendListItems(details, allLi);
       container.append(details);
+      const video = document.createElement('video');
+      container.append(video);
+      video.controls = true;
+      video.innerHTML = `<source src="${this._data?.video}" type="video/mp4">`
       this._populateComments(container, comments);
       const title = handleRaceNames(race.raceName);
       return {title, desc: '', elem: container}

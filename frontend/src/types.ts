@@ -110,6 +110,7 @@ export interface Teams extends APIResponse {
 }
 
 export interface Races extends APIResponse {
+  "video": string;
   "championship": {
     "championshipId": string;
     "championshipName": string;
