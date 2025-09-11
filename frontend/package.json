@@ -2,8 +2,8 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx http-server dist -p 8080",
-    "start:mock:server": "npx tsx watch ./mock-server/app.ts",
+    "start": "npm run build && tsx ./mock-server/app.ts",
+    "start:mock:server": "tsx watch ./mock-server/app.ts",
     "build": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm",
     "dev": "npm run clean && npm run copy && esbuild src/index.ts --bundle --outdir=dist/scripts --format=esm --watch",
     "copy": "copyfiles index.html assets/* assets/**/* styles/* dist",
@@ -17,9 +17,9 @@
     "copyfiles": "^2.4.1",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",
-    "http-server": "^14.1.1",
     "jsdom": "^26.1.0",
     "rimraf": "^6.0.1",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }

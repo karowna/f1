@@ -53,7 +53,7 @@ const mockComments = {
       id: 1,
       author: 'user1',
       content:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+        "The Australian Grand Prix always delivers exciting racing, with its mix of high-speed straights and tight corners making Albert Park a real challenge for both drivers and teams.",
       timestamp: new Date('2025-08-01T10:05:30Z'),
     },
   ],
