@@ -1,14 +1,14 @@
 import { PageClass } from '../types';
-import { fetchData } from "../utils";
+import { fetchData } from '../utils';
 
 export class Auth implements PageClass {
   private readonly _param: string;
-  
+
   constructor(param: string) {
     this._param = param;
     console.log(`[Auth] - Initialised Auth class, param: ${this._param}`);
   }
-  
+
   private _populateLogin(): string {
     return `
       <input type="text" id="email" placeholder="Email" pattern="[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$" required />
@@ -24,11 +24,11 @@ export class Auth implements PageClass {
       <input type="password" id="password-2" placeholder="Re-enter password" required />
     `;
   }
-  
+
   private _validateInputs(): { inputs: HTMLInputElement[]; valid: boolean } {
     const inputs = Array.from(document.getElementsByTagName('input'));
     const invalidInput = inputs.find((input) => !input.validity.valid);
-    inputs.forEach((input) => input.className = '');
+    inputs.forEach((input) => (input.className = ''));
     let errorMsg = '';
     console.log('Inputs:', invalidInput?.validationMessage);
     if (invalidInput) {
@@ -51,7 +51,7 @@ export class Auth implements PageClass {
     document.getElementById('auth-error')!.innerHTML = errorMsg || '&nbsp;';
     return { inputs: inputs, valid: !errorMsg };
   }
-  
+
   private _handleAction(linkHTML: string, linkHref: string, title: string, msg: string, token: string | null, userId = ''): void {
     const authLink = document.getElementById('navbar')!.getElementsByTagName('nav')[0].children[4] as HTMLAnchorElement;
     fetchData.token = token;
@@ -62,7 +62,7 @@ export class Auth implements PageClass {
     document.getElementById('auth-msg')!.innerHTML = msg;
     document.getElementsByTagName('form')[0].remove();
   }
-  
+
   private async _handleSubmit(): Promise<void> {
     const { inputs, valid } = this._validateInputs();
 
@@ -82,19 +82,19 @@ export class Auth implements PageClass {
           this._handleAction('Login/Signup', '#auth/login', 'Signed up', 'Please verify your email to log in.', null);
         } else if (!this._param || this._param === 'login') {
           console.log('[Auth] - Logging in...');
-          const {token, userId} = await fetchData.post<{token: string, userId: string}>('/auth/login', { email, password });
+          const { token, userId } = await fetchData.post<{ token: string; userId: string }>('/auth/login', { email, password });
           const msg = 'Want to leave? <a href="#auth/logout">Log out.</a>';
           this._handleAction('Logout', '#auth/logout', 'Logged in', msg, token, userId);
         }
       } catch (error) {
         console.error(`[Auth] - Error during auth request: ${error}`);
-        inputs.forEach((input) => input.value = '');
+        inputs.forEach((input) => (input.value = ''));
         document.getElementById('auth-error')!.innerHTML = 'An error occurred. Please try again later.';
       }
       document.getElementById('overlay')!.classList.toggle('hidden');
     }
   }
-  
+
   public loaded(): void {
     document.getElementById('submit')?.addEventListener('click', (e: Event): void => {
       e.preventDefault();
@@ -102,7 +102,7 @@ export class Auth implements PageClass {
     });
     console.log(`[Auth] - Auth page loaded: ${this._param}`);
   }
-  
+
   public getHTML(): string {
     let inputs = '';
     let formType = '';
@@ -118,7 +118,7 @@ export class Auth implements PageClass {
       formType = 'Log in';
       msgText = 'Don’t have an account yet? <a href="#auth/signup">Sign up.</a>';
     }
-    
+
     return `
       <section id="auth">
         <h1 id="auth-title">${formType}</h1>

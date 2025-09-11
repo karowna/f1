@@ -1,8 +1,9 @@
-import {describe, expect, it } from "vitest";
-import {NotFound} from "../../src/pages"
+import { describe, expect, it } from 'vitest';
 
-describe("NotFound Page tests", () => {
-  it("should render not found page content", () => {
+import { NotFound } from '../../src/pages';
+
+describe('NotFound Page tests', () => {
+  it('should render not found page content', () => {
     // Arrange
     const notFound = new NotFound('');
     // Act

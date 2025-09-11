@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+
 import { Races } from '../../src/pages';
 import { fetchData } from '../../src/utils';
 
@@ -19,10 +20,10 @@ describe('Races', () => {
           winner: { driverId: 'd1', name: 'John', surname: 'Doe' },
           teamWinner: { teamId: 't1', teamName: 'Test Team' },
           schedule: { race: { date: '2024-06-01', time: '12:00:00Z' } },
-          laps: 50
-        }
+          laps: 50,
+        },
       ],
-      video: 'test.mp4'
+      video: 'test.mp4',
     });
     vi.spyOn(fetchData, 'post').mockResolvedValue({});
     vi.spyOn(fetchData, 'put').mockResolvedValue({});
@@ -58,9 +59,9 @@ describe('Races', () => {
           winner: { driverId: 'd1', name: 'John', surname: 'Doe' },
           teamWinner: { teamId: 't1', teamName: 'Test Team' },
           schedule: { race: { date: '2024-06-01', time: '12:00:00Z' } },
-          laps: 50
-        }
-      ]
+          laps: 50,
+        },
+      ],
     };
     // Act
     const result = (races as any)._populateRacesTable();

@@ -1,5 +1,5 @@
 import { PageClass } from '../types';
-import { PageName } from "../enums";
+import { PageName } from '../enums';
 
 export class NotFound implements PageClass {
   private readonly _param: string;

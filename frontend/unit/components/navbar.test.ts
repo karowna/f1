@@ -1,12 +1,13 @@
-import { it, expect, describe } from "vitest";
-import { navbar } from "../../src/components/navbar";
+import { it, expect, describe } from 'vitest';
 
-describe("navbar test", () => {
-  it("should be instantiated", () => {
+import { navbar } from '../../src/components/navbar';
+
+describe('navbar test', () => {
+  it('should be instantiated', () => {
     // assert
     expect(navbar).toBeInstanceOf(Object);
   });
-  
+
   it('should have nav links populated', () => {
     // arrange
     const nav = document.getElementsByTagName('nav')[0];
@@ -19,7 +20,7 @@ describe("navbar test", () => {
     expect(links[3].textContent).toBe('Teams');
     expect(links[4].textContent).toBe('Login/Signup');
   });
-  
+
   it('should toggle classes on burger menu click', () => {
     // arrange
     const burger = document.getElementById('burger-menu')!;

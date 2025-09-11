@@ -1,15 +1,17 @@
-import {describe, expect, it } from "vitest";
-import {Home} from "../../src/pages"
+import { describe, expect, it } from 'vitest';
 
-describe("Home Page tests", () => {
-  it("should render home page content", () => {
+import { Home } from '../../src/pages';
+
+describe('Home Page tests', () => {
+  it('should render home page content', () => {
     // Arrange
     const home = new Home('');
     // Act
     const content = home.getHTML();
 
     // Assert
-    expect(content).toContain(`<div id="slide-show"><div><img src="./assets/images/slide-1.jpg" alt="F1 Car 1"></div><div><img src="./assets/images/slide-2.jpg" alt="F1 Car 2"></div><div><img src="./assets/images/slide-3.jpg" alt="F1 Car 3"></div><div><img src="./assets/images/slide-4.jpg" alt="F1 Car 4"></div></div>
+    expect(content)
+      .toContain(`<div id="slide-show"><div><img src="./assets/images/slide-1.jpg" alt="F1 Car 1"></div><div><img src="./assets/images/slide-2.jpg" alt="F1 Car 2"></div><div><img src="./assets/images/slide-3.jpg" alt="F1 Car 3"></div><div><img src="./assets/images/slide-4.jpg" alt="F1 Car 4"></div></div>
       <section id="home-section">
         <h1>F1 Portal</h1>
         <div>

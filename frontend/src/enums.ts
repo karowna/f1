@@ -9,7 +9,7 @@ export enum PageName {
 
 export enum Theme {
   LIGHT = 'light',
-  DARK = 'dark'
+  DARK = 'dark',
 }
 
 export enum HTTPMethod {

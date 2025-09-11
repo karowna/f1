@@ -4,7 +4,7 @@ class LinksSection {
     this._populateSocials();
     console.log('[LinksSection] - Initialised LinksSection class');
   }
-  
+
   private _populateLinks(): void {
     const links = [
       { name: 'F1 Official', url: 'https://www.formula1.com/' },
@@ -12,13 +12,13 @@ class LinksSection {
       { name: 'F1 BBC', url: 'https://www.bbc.co.uk/sport/formula1' },
       { name: 'F1 Academy', url: 'https://www.f1academy.com/' },
     ];
-    
+
     const h3 = document.createElement('h3');
     h3.textContent = 'Useful Links';
     document.getElementById('links')!.appendChild(h3);
     const div = document.createElement('div');
     document.getElementById('links')!.appendChild(div);
-    links.forEach(link => {
+    links.forEach((link) => {
       const a = document.createElement('a');
       a.href = link.url;
       a.target = '_blank';

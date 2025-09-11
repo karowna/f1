@@ -1,5 +1,6 @@
-import { fetchData } from "./fetchData";
-import {PageName} from "../enums";
+import { PageName } from '../enums';
+
+import { fetchData } from './fetchData';
 
 async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void> {
   try {
@@ -51,7 +52,7 @@ export function appendListItems(parent: HTMLElement, allLi: {}[]): void {
     const li = document.createElement('li');
     li.innerHTML = `<span>${Object.keys(element)[0]}:</span> ${Object.values(element)[0]}`;
     parent.appendChild(li);
-  })
+  });
 }
 
 export function getFlexTable(headings: string[]): HTMLElement {

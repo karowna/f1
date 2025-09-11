@@ -1,12 +1,5 @@
 import { PageClass, Drivers as IDrivers, Driver, DriverTeamRaceContent } from '../types';
-import {
-  fetchData,
-  handleCustomContent,
-  appendListItems,
-  getFlexTable,
-  getFlexTableRow,
-  setErrorMsg,
-} from '../utils';
+import { fetchData, handleCustomContent, appendListItems, getFlexTable, getFlexTableRow, setErrorMsg } from '../utils';
 
 export class Drivers implements PageClass {
   private readonly _param: string;
@@ -15,7 +8,7 @@ export class Drivers implements PageClass {
     this._param = param;
     console.log('[Drivers] - Initialised Drivers class');
   }
-  
+
   private _handleDriverEdgeCases(name: string, surname: string): string {
     if (surname.startsWith('Kimi')) {
       [name, surname] = surname.split(' ');
@@ -36,7 +29,7 @@ export class Drivers implements PageClass {
     }
     return position;
   }
-  
+
   private _populateDrivers(data: IDrivers): DriverTeamRaceContent {
     const ul = document.createElement('ul');
     ul.id = 'drivers-list';
@@ -54,11 +47,11 @@ export class Drivers implements PageClass {
       elem: ul,
     };
   }
-  
+
   private _convertDate(dateStr: string): string {
     return new Date(dateStr).toLocaleString('en-GB').toString().split(',')[0];
   }
-  
+
   private _populateDriverForAuthenticatedUser(data: Driver): HTMLElement {
     const results = document.createElement('div');
     results.id = 'driver-results';
@@ -71,14 +64,14 @@ export class Drivers implements PageClass {
       const content = [
         `<a href="#races/${race.raceId}">${this._handleRaceNames(race.name)}</a>`,
         this._convertDate(race.date),
-        this._handlePosition(result.finishingPosition)
+        this._handlePosition(result.finishingPosition),
       ];
       flexTable.appendChild(getFlexTableRow(content, i));
-    })
+    });
     results.appendChild(flexTable);
     return results;
   }
-  
+
   private _populateDriver(data: Driver): DriverTeamRaceContent {
     const { name, surname, nationality, birthday, number } = data.driver;
     const { teamName, teamNationality, teamId } = data.team;
@@ -91,9 +84,9 @@ export class Drivers implements PageClass {
     const details = document.createElement('ul');
     details.id = 'driver-details';
     const allLi = [
-      {Name: `${name} ${surname}`},
-      {Nationality: nationality},
-      {'Date of birth': birthday},
+      { Name: `${name} ${surname}` },
+      { Nationality: nationality },
+      { 'Date of birth': birthday },
       { 'Car number': number },
       { 'Championship points': 'N/A' }, // TODO: Update when API supports it
       { Team: `<a href="#teams/${teamId}">${teamName}</a>` },
@@ -107,7 +100,7 @@ export class Drivers implements PageClass {
     }
     return { title: `${name} ${surname}`, desc: '', elem: driver };
   }
-  
+
   public async loaded(): Promise<void> {
     document.getElementById('overlay')!.classList.toggle('hidden');
     try {

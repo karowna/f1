@@ -9,14 +9,14 @@ export class Home implements PageClass {
     this._param = param;
     console.log(`[Home] - Initialised Home class with ${this._param}`);
   }
-  
+
   private _populateSlides(): string {
     return Array(this._slides)
       .fill(0)
       .map((_, i) => `<div><img src="./assets/images/slide-${i + 1}.jpg" alt="F1 Car ${i + 1}"></div>`)
       .join('');
   }
-  
+
   private _populateHome(): string {
     return `
       <p><img id="img-left" src="./assets/images/home-main-left.jpg" alt="f1 car black and white">Step into the fast-paced world of Formula 1. Here you’ll find everything a fan needs, 
@@ -33,7 +33,7 @@ export class Home implements PageClass {
         checkered flag of the F1 season.</p>
     `;
   }
-  
+
   public loaded(): void {
     console.log('[Home] - starting slideshow');
     const slideShowImages = document.getElementById('slide-show');
@@ -41,12 +41,12 @@ export class Home implements PageClass {
     const slides = Array.from(slideShowImages?.getElementsByTagName('div') || []);
     if (!slides.length) return;
     const totalSlides = slides.length;
-    slides.forEach((slide, i, index) => slide.style.opacity = i === currentIndex ? '1' : '0');
-    
+    slides.forEach((slide, i) => (slide.style.opacity = i === currentIndex ? '1' : '0'));
+
     this._intervalId = window.setInterval((): void => {
       console.log('[Home] - changing slide');
       currentIndex = (currentIndex + 1) % totalSlides;
-      slides.forEach((slide, i, index) => slide.style.opacity = i === currentIndex ? '1' : '0');
+      slides.forEach((slide, i) => (slide.style.opacity = i === currentIndex ? '1' : '0'));
     }, 3000);
   }
 

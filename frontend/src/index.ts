@@ -1,2 +1,2 @@
-export { router } from './utils'
-export { footer, navbar, linksSection } from './components'
+export { router } from './utils';
+export { footer, navbar, linksSection } from './components';

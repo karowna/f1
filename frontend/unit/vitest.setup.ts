@@ -43,4 +43,4 @@ document.body.innerHTML = `<!DOCTYPE html>
 <script type="module" src="./scripts/index.js"></script>
 </body>
 </html>
-`
+`;

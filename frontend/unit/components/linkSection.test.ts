@@ -1,14 +1,14 @@
-import { it, expect, describe } from "vitest";
-import { linksSection } from "../../src/components/linksSection";
+import { it, expect, describe } from 'vitest';
 
-describe("Links Section tests", () => {
-  
-  it("should be instantiated", () => {
+import { linksSection } from '../../src/components/linksSection';
+
+describe('Links Section tests', () => {
+  it('should be instantiated', () => {
     // assert
     expect(linksSection).toBeInstanceOf(Object);
   });
-  
-  it("should contain the correct number of links", () => {
+
+  it('should contain the correct number of links', () => {
     // arrange
     const linksSectionElement = document.getElementById('links');
     const links = linksSectionElement.getElementsByTagName('a');
@@ -17,7 +17,7 @@ describe("Links Section tests", () => {
     expect(links.length).toBe(4);
   });
 
-  it("should have valid href attributes in links", () => {
+  it('should have valid href attributes in links', () => {
     // arrange
     const linksSectionElement = document.getElementById('socials');
     const links = linksSectionElement.getElementsByTagName('a');

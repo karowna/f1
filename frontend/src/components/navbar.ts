@@ -22,7 +22,7 @@ class Navbar {
       this._nav.appendChild(a);
     });
   }
-  
+
   private _burgerMenuClick() {
     this._burger.addEventListener('click', () => {
       this._burger.classList.toggle('rotate');

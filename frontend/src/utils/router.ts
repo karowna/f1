@@ -1,6 +1,6 @@
 import { PageClass } from '../types';
 import { PageName } from '../enums';
-import { Auth, Drivers, Home, NotFound, Races, Teams } from "../pages";
+import { Auth, Drivers, Home, NotFound, Races, Teams } from '../pages';
 
 class Router {
   private _livePage: PageClass | null = null;
@@ -12,33 +12,33 @@ class Router {
     { path: PageName.TEAMS, page: Teams },
     { path: PageName.NOT_FOUND, page: NotFound },
   ];
-  
+
   constructor() {
     window.addEventListener('hashchange', () => this._render());
     window.addEventListener('DOMContentLoaded', () => this._render());
     console.log('[Router] - Initialised Router class');
   }
-  
+
   private _matchRoute(path: PageName): new (param: string) => PageClass {
-    return this._routes.find(r => r.path === path)?.page ?? NotFound;
+    return this._routes.find((r) => r.path === path)?.page ?? NotFound;
   }
-  
+
   private _getPath(): { path: PageName; param: string | undefined } {
     if (!location.pathname.endsWith('index.html')) location.pathname = `${location.pathname}index.html`;
     if (!location.hash) location.hash = `#${PageName.HOME}`;
     if (location.hash.startsWith('#access_token')) location.hash = `#${PageName.AUTH}`;
     console.log('[Router] - Current hash:', location.hash);
-    let [path, param] = location.hash.replace('#', '').split('/');
+    const [path, param] = location.hash.replace('#', '').split('/');
     return { path, param } as { path: PageName; param: string | undefined };
   }
-  
+
   private _setActiveLinks(path: PageName): void {
-    document.querySelectorAll('nav a').forEach(a => {
+    document.querySelectorAll('nav a').forEach((a) => {
       const route = a.getAttribute('href');
       a.classList.toggle('active', route === `#${path}`);
     });
   }
-  
+
   private _render(): void {
     const { path, param } = this._getPath();
     this._livePage?.unloaded?.();
@@ -47,7 +47,7 @@ class Router {
     this._livePage.loaded?.();
     this._setActiveLinks(path);
   }
-  
+
   public navigateTo(path: PageName): void {
     location.hash = `#${path}`;
   }

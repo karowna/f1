@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { Drivers } from '../../src/pages';
 
 describe('Drivers', () => {
@@ -58,7 +59,7 @@ describe('Drivers', () => {
     const data = {
       drivers: [{ driverId: '1', name: 'Lewis', surname: 'Hamilton' }],
       total: 1,
-      season: '2025'
+      season: '2025',
     };
     // Act
     const result = drivers['_populateDrivers'](data as any);
@@ -75,14 +76,14 @@ describe('Drivers', () => {
         surname: 'Hamilton',
         nationality: 'British',
         birthday: '1985-01-07',
-        number: '44'
+        number: '44',
       },
       team: {
         teamName: 'Mercedes',
         teamNationality: 'German',
-        teamId: 'mercedes'
+        teamId: 'mercedes',
       },
-      results: []
+      results: [],
     };
     // Act
     const result = drivers['_populateDriver'](data as any);

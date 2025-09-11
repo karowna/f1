@@ -1,5 +1,5 @@
 import { PageClass, Teams as ITeams, Team, DriverTeamRaceContent } from '../types';
-import {appendListItems, fetchData, handleCustomContent, setErrorMsg} from '../utils';
+import { appendListItems, fetchData, handleCustomContent, setErrorMsg } from '../utils';
 
 export class Teams implements PageClass {
   private readonly _param: string;
@@ -8,7 +8,7 @@ export class Teams implements PageClass {
     this._param = param;
     console.log('[Teams] - Initialised Teams class');
   }
-  
+
   private _populateTeams(data: ITeams): DriverTeamRaceContent {
     const ul = document.createElement('ul');
     ul.id = 'teams-list';
@@ -26,7 +26,7 @@ export class Teams implements PageClass {
       elem: ul,
     };
   }
-  
+
   private _populateTeam(data: Team): DriverTeamRaceContent {
     const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
     const team = document.createElement('div');
@@ -39,9 +39,9 @@ export class Teams implements PageClass {
     const details = document.createElement('ul');
     details.id = 'team-details';
     const allLi = [
-      {Name: teamName},
-      {Nationality: teamNationality},
-      {'First appearance': firstAppeareance},
+      { Name: teamName },
+      { Nationality: teamNationality },
+      { 'First appearance': firstAppeareance },
       { 'Championship points': 'N/A' }, // TODO: Update when API supports it
       { 'Constructors championships': constructorsChampionships ?? '0' },
       { 'Drivers championships': driversChampionships ?? '0' },
@@ -51,7 +51,7 @@ export class Teams implements PageClass {
     team.appendChild(details);
     return { title: `${teamName}`, desc: '', elem: team };
   }
-  
+
   private async _populateContent(): Promise<{ title: string; desc: string; elem: HTMLElement }> {
     const path = `/teams${this._param ? `/${this._param}` : ''}`;
     const data: ITeams | Team = await fetchData.get(path, fetchData.loggedIn, true);
