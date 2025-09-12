@@ -28,7 +28,7 @@ export class Teams implements PageClass {
   }
 
   private async _populateTeam(data: Team): Promise<DriverTeamRaceContent> {
-    const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
+    const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships, points } = data.team[0];
     const team = document.createElement('div');
     const logoContainer = document.createElement('div');
     const img = document.createElement('img');
@@ -42,7 +42,7 @@ export class Teams implements PageClass {
       { Name: teamName },
       { Nationality: teamNationality },
       { 'First appearance': firstAppeareance },
-      { 'Championship points': 'N/A' }, // TODO: Update when API supports it
+      { 'Championship points': points ?? 'N/A' },
       { 'Constructors championships': constructorsChampionships ?? '0' },
       { 'Drivers championships': driversChampionships ?? '0' },
     ];

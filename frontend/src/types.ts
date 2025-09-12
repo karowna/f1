@@ -17,6 +17,7 @@ interface DriverBasic {
   number: number;
   shortName: string;
   url: string;
+  points: number;
 }
 
 interface TeamBasic {
@@ -27,6 +28,7 @@ interface TeamBasic {
   constructorsChampionships: null;
   driversChampionships: null;
   url: string;
+  points: number;
 }
 
 interface Schedule {

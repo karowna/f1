@@ -29,9 +29,10 @@ describe('Helpers unit tests', () => {
     `;
       const div = document.createElement('div');
       fetchData.token = '123';
+      fetchData.userId = 'aabbb11';
 
       // Act
-      handleCustomContent(div, 'driver', '123');
+      await handleCustomContent(div, 'driver', '123');
       const pMsg = div.getElementsByTagName('p')[0];
 
       // Assert
@@ -40,18 +41,25 @@ describe('Helpers unit tests', () => {
       // Act
       pMsg.click();
       // Assert
-      expect(mockFetch).toHaveBeenCalledTimes(1);
-      expect(mockFetch.mock.calls[0][0]).toBe('http://localhost:3000/favourites/driver/123');
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(mockFetch.mock.calls[0][0]).toBe('http://localhost:3000/favourites/driver/123/aabbb11');
       expect(mockFetch.mock.calls[0][1]).toStrictEqual({
+        method: 'GET',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${fetchData.token}`,
+        }),
+      });
+      expect(mockFetch.mock.calls[1][1]).toStrictEqual({
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${fetchData.token}`,
         }),
-        body: JSON.stringify({ favourite: true }),
+        body: JSON.stringify({ favourite: false }),
       });
       await new Promise(process.nextTick);
-      expect(document.getElementById('favourite-text').innerHTML).toBe('<span>Click to set as favourite driver </span>');
+      expect(document.getElementById('favourite-text').innerHTML).toBe('<span>One of your favourite drivers </span>');
     });
   });
 

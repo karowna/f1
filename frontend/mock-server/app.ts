@@ -83,27 +83,29 @@ app.delete('/comments/:id/:commentId', async (req, res): Promise<void> => {
 // Favourites
 const favouriteDrivers = {};
 const favouriteTeams = {};
-app.post('/favourites/driver/:id', async (req, res): Promise<void> => {
-  console.log(`Toggling favourite for driver ID ${req.params.id}...`, JSON.stringify(req.body));
-  favouriteDrivers[req.params.id] = req.body.favourite;
+app.post('/favourites/driver/:driverId/:userId', async (req, res): Promise<void> => {
+  console.log(`Toggling favourite for driver ID ${req.params.driverId} and user ${req.params.userId}...`, JSON.stringify(req.body));
+  if (!favouriteDrivers[req.params.userId]) favouriteDrivers[req.params.userId] = {};
+  favouriteDrivers[req.params.userId][req.params.driverId] = req.body.favourite;
   await require('util').promisify(setTimeout)(500);
-  res.status(200).json({ message: `Favourite status for driver ID ${req.params.id} toggled. ${req.body}` });
+  res.status(200).json({ message: `Favourite status for driver ID ${req.params.driverId} toggled. ${req.body}` });
 });
-app.get('/favourites/driver/:id', async (req, res): Promise<void> => {
-  console.log(`Get favourite for driver ID ${req.params.id}...`);
+app.get('/favourites/driver/:driverId/:userId', async (req, res): Promise<void> => {
+  console.log(`Get favourite for driver ID ${req.params.driverId} and user ${req.params.userId}...`);
   await require('util').promisify(setTimeout)(500);
-  res.status(200).json({ favourite: favouriteDrivers[req.params.id] ?? false });
+  res.status(200).json({ favourite: favouriteDrivers?.[req.params.userId]?.[req.params.driverId] ?? false });
 });
-app.post('/favourites/team/:id', async (req, res): Promise<void> => {
-  console.log(`Toggling favourite for team ID ${req.params.id}...`, JSON.stringify(req.body));
-  favouriteTeams[req.params.id] = req.body.favourite;
+app.post('/favourites/team/:teamId/:userId', async (req, res): Promise<void> => {
+  console.log(`Toggling favourite for team ID ${req.params.teamId} and user ${req.params.teamId}...`, JSON.stringify(req.body));
+  if (!favouriteTeams[req.params.userId]) favouriteTeams[req.params.userId] = {};
+  favouriteTeams[req.params.userId][req.params.teamId] = req.body.favourite;
   await require('util').promisify(setTimeout)(500);
-  res.status(200).json({ message: `Favourite status for driver ID ${req.params.id} toggled. ${req.body}` });
+  res.status(200).json({ message: `Favourite status for driver ID ${req.params.teamId} toggled. ${req.body}` });
 });
-app.get('/favourites/team/:id', async (req, res): Promise<void> => {
-  console.log(`Get favourite for team ID ${req.params.id}: ${favouriteTeams[req.params.id]}...`);
+app.get('/favourites/team/:teamId/:userId', async (req, res): Promise<void> => {
+  console.log(`Get favourite for team ID ${req.params.teamId} and user ${req.params.userId}...`);
   await require('util').promisify(setTimeout)(500);
-  res.status(200).json({ favourite: favouriteTeams[req.params.id] ?? false });
+  res.status(200).json({ favourite: favouriteTeams?.[req.params.userId]?.[req.params.teamId] ?? false });
 });
 
 // Authentication (mocked)
