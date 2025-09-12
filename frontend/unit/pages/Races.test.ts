@@ -106,6 +106,28 @@ describe('Races', () => {
     expect(span.title).toBe('title');
   });
 
+  it('should render comments section with comments', () => {
+    // Arrange
+    const races = new Races('testParam');
+    const container = document.createElement('div');
+    fetchData.userId = 'u1';
+    fetchData.token = '1234';
+    const comments = [
+      { id: 'c1', userId: 'u1', content: 'Test comment', timestamp: Date.now() },
+      { id: 'c2', userId: 'u2', content: 'Another comment', timestamp: Date.now() }
+    ];
+
+    // Act
+    (races as any)._populateComments(container, comments);
+
+    // Assert
+    expect(container.querySelector('#comments-section')).toBeDefined();
+    expect(container.querySelectorAll('.own-comment').length).toBe(1);
+    expect(container.querySelectorAll('.comment').length).toBe(1);
+    expect(container.innerHTML).toContain('Test comment');
+    expect(container.innerHTML).toContain('Another comment');
+  });
+
   it('should generate correct table for races data', () => {
     // Arrange
     (races as any)._data = {
