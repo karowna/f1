@@ -61,11 +61,7 @@ export class Races implements PageClass {
   }
 
   private async _updateContent(): Promise<void> {
-    document.getElementById('overlay')!.classList.toggle('hidden');
     document.getElementById('race-container')!.remove();
-    const content = await this._populateRace();
-    document.getElementById('races-desc')!.innerHTML = content.desc;
-    document.getElementById('overlay')!.classList.toggle('hidden');
     await this.loaded();
   }
 
