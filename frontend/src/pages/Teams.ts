@@ -27,7 +27,7 @@ export class Teams implements PageClass {
     };
   }
 
-  private _populateTeam(data: Team): DriverTeamRaceContent {
+  private async _populateTeam(data: Team): Promise<DriverTeamRaceContent> {
     const { teamId, teamName, teamNationality, firstAppeareance, constructorsChampionships, driversChampionships } = data.team[0];
     const team = document.createElement('div');
     const logoContainer = document.createElement('div');
@@ -47,7 +47,7 @@ export class Teams implements PageClass {
       { 'Drivers championships': driversChampionships ?? '0' },
     ];
     appendListItems(details, allLi);
-    handleCustomContent(details, 'team', teamId);
+    await handleCustomContent(details, 'team', teamId);
     team.appendChild(details);
     return { title: `${teamName}`, desc: '', elem: team };
   }

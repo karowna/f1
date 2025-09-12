@@ -72,7 +72,7 @@ export class Drivers implements PageClass {
     return results;
   }
 
-  private _populateDriver(data: Driver): DriverTeamRaceContent {
+  private async _populateDriver(data: Driver): Promise<DriverTeamRaceContent> {
     const { name, surname, nationality, birthday, number } = data.driver;
     const { teamName, teamNationality, teamId } = data.team;
     const imgName = this._handleDriverEdgeCases(name, surname);
@@ -93,7 +93,7 @@ export class Drivers implements PageClass {
       { 'Team nationality': teamNationality },
     ];
     appendListItems(details, allLi);
-    handleCustomContent(details, 'driver', this._param);
+    await handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
     if (fetchData.loggedIn) {
       driver.appendChild(this._populateDriverForAuthenticatedUser(data));
@@ -107,7 +107,7 @@ export class Drivers implements PageClass {
       console.log(`[Drivers] - Fetching ${this._param ? `details for driver ID ${this._param}` : 'Fetching list of drivers'}...`);
       const path = `/drivers${this._param ? `/${this._param}` : ''}`;
       const data: IDrivers | Driver = await fetchData.get(path, fetchData.loggedIn, true);
-      const uiData = 'drivers' in data ? this._populateDrivers(data) : this._populateDriver(data);
+      const uiData = 'drivers' in data ? this._populateDrivers(data) : await this._populateDriver(data);
       document.getElementById('drivers-title')!.innerHTML = uiData.title;
       document.getElementById('drivers-desc')!.innerHTML = uiData.desc;
       document.getElementById('drivers')!.appendChild(uiData.elem);
