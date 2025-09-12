@@ -72,23 +72,27 @@ const mockComments = {
 };
 app.get('/comments/:id', async (req, res): Promise<void> => {
   console.log(`Fetching comments for ID ${req.params.id}...`);
+  await require('util').promisify(setTimeout)(500);
   res.status(200).json(mockComments[req.params.id] ?? []);
 });
 app.post('/comments/:id', async (req, res): Promise<void> => {
   console.log(`Posting comments for ID ${req.params.id}...`);
   if (!mockComments[req.params.id]) mockComments[req.params.id] = [];
   mockComments[req.params.id].push({ ...req.body, id: Date.now(), timestamp: new Date() });
+  await require('util').promisify(setTimeout)(500);
   res.status(200).json({ completed: true });
 });
 app.put('/comments/:id', async (req, res): Promise<void> => {
   console.log(`Updating comments for ID ${req.params.id} and comment id ${req.body.id}...`);
   const comment = mockComments[req.params.id].find((comment) => comment.id === Number(req.body.id));
   comment.content = req.body.content;
+  await require('util').promisify(setTimeout)(500);
   res.status(200).json({ completed: true });
 });
 app.delete('/comments/:id/:commentId', async (req, res): Promise<void> => {
   console.log(`Deleting comments for ID ${req.params.id} and comment id ${req.params.commentId}...`);
   mockComments[req.params.id] = mockComments[req.params.id].filter((comment) => comment.id !== Number(req.params.commentId));
+  await require('util').promisify(setTimeout)(500);
   res.status(200).json({ completed: true });
 });
 
