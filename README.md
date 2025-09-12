@@ -26,3 +26,18 @@ To run the frontend application with a mock server, follow these steps:
 - run "npm install" to install the dependencies
 - run "npm start" to start the development server
 - open your browser and go to `http://localhost:3000`
+
+## Frontend Application paths
+All pages are navigable but authenticated users can access additional features like adding comments.<br>
+The application uses hash routing, so the paths are as follows:
+- `#home` - Home page
+- `#auth/login` - Log In page
+- `#auth/logout` - Log Out page
+- `#auth/signup` - Sign Up page
+- `#races` - List of 2025 races
+- `#races/:raceId` - Race details page with comments section
+- `#drivers` - List of drivers
+- `#drivers/:driverId` - Driver details page
+- `#teams` - List of teams
+- `#teams/:teamId` - Team details page
+- `any` - Not Found page
