@@ -7,7 +7,7 @@ async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void>
     document.getElementById('overlay')!.classList.toggle('hidden');
     const favSpan = document.getElementById('favourite-span')!;
     const text = document.getElementById('favourite-text')!.getElementsByTagName('span')[0];
-    const isFavourite = !!favSpan.className;
+    const isFavourite = !favSpan.className;
     await fetchData.post(`/favourites/${type}/${id}`, { favourite: isFavourite }, true);
     favSpan.classList.toggle('favourite');
     text.innerHTML = !isFavourite ? `One of your favourite ${type}s ` : `Click to set as favourite ${type} `;
@@ -20,16 +20,16 @@ async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void>
   document.getElementById('overlay')!.classList.toggle('hidden');
 }
 
-export function handleCustomContent(parentElem: HTMLElement, type: 'driver' | 'team', id: string): void {
+export async function handleCustomContent(parentElem: HTMLElement, type: 'driver' | 'team', id: string): Promise<void> {
   if (fetchData.loggedIn) {
+    const { favourite } = await fetchData.get<{ favourite: boolean }>(`/favourites/${type}/${id}`, fetchData.loggedIn);
     const favouriteP = document.createElement('p');
-    const fav = true; // TODO: Placeholder for actual favourite check
     favouriteP.id = 'favourite-text';
-    favouriteP.innerHTML = `<span>${fav ? 'One of your favourite teams ' : 'Click to set as favourite team '}</span>`;
+    favouriteP.innerHTML = `<span>${favourite ? 'One of your favourite teams ' : 'Click to set as favourite team '}</span>`;
     const favouriteSpan = document.createElement('span');
     favouriteSpan.id = 'favourite-span';
     favouriteSpan.innerHTML = '&nbsp;&#10084;';
-    favouriteSpan.className = fav ? 'favourite' : '';
+    favouriteSpan.className = favourite ? 'favourite' : '';
     favouriteP.addEventListener('click', () => _setFavourite(type, id));
     favouriteP.appendChild(favouriteSpan);
     parentElem.appendChild(favouriteP);
