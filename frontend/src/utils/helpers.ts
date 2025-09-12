@@ -8,7 +8,6 @@ async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void>
     const favSpan = document.getElementById('favourite-span')!;
     const text = document.getElementById('favourite-text')!.getElementsByTagName('span')[0];
     const isFavourite = !favSpan.className;
-    console.log('>>>>>>', `/favourites/${type}/${id}/${fetchData.userId}`)
     await fetchData.post(`/favourites/${type}/${id}/${fetchData.userId}`, { favourite: isFavourite }, true);
     favSpan.classList.toggle('favourite');
     text.innerHTML = !isFavourite ? `One of your favourite ${type}s ` : `Click to set as favourite ${type} `;
