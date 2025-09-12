@@ -93,7 +93,6 @@ export class Drivers implements PageClass {
       { 'Team nationality': teamNationality },
     ];
     appendListItems(details, allLi);
-    console.log('>>>>>>///////', this._param)
     await handleCustomContent(details, 'driver', this._param);
     driver.appendChild(details);
     if (fetchData.loggedIn) {

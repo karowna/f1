@@ -25,7 +25,13 @@ app.get('/drivers', async (req, res): Promise<void> => {
 });
 app.get('/drivers/:id', async (req, res): Promise<void> => {
   const resp: Response = await fetch(`https://f1api.dev/api/current/drivers/${req.params.id}`);
-  await _handleResp(resp, res);
+  if (!resp.ok) {
+    res.status(resp.status).json({ error: `Failed to fetch: ${resp.statusText}` });
+    return;
+  }
+  const data = await resp.json();
+  data.driver.points = Math.floor(Math.random() * 20); // Mock points
+  res.status(200).json(data);
 });
 app.get('/teams', async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current/teams');
@@ -33,7 +39,13 @@ app.get('/teams', async (req, res): Promise<void> => {
 });
 app.get('/teams/:id', async (req, res): Promise<void> => {
   const resp: Response = await fetch(`https://f1api.dev/api/current/teams/${req.params.id}`);
-  await _handleResp(resp, res);
+  if (!resp.ok) {
+    res.status(resp.status).json({ error: `Failed to fetch: ${resp.statusText}` });
+    return;
+  }
+  const data = await resp.json();
+  data.team[0].points = Math.floor(Math.random() * 20); // Mock points
+  res.status(200).json(data);
 });
 app.get('/races', async (req, res): Promise<void> => {
   const resp: Response = await fetch('https://f1api.dev/api/current');
