@@ -42,7 +42,7 @@ app.get('/races', async (req, res): Promise<void> => {
     return;
   }
   const data = await resp.json();
-  data.video = 'https://v.ftcdn.net/03/94/36/21/240_F_394362119_yK7K9m9mv5EjKAuLCCtAvlUgHQenck6R_ST.mp4';
+  data.races.forEach(race => race.video = 'https://www.youtube.com/embed/l3ahPJy22_o');
   res.status(200).json(data);
 });
 

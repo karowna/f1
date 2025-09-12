@@ -112,7 +112,6 @@ export interface Teams extends APIResponse {
 }
 
 export interface Races extends APIResponse {
-  video: string;
   championship: {
     championshipId: string;
     championshipName: string;
@@ -120,6 +119,7 @@ export interface Races extends APIResponse {
     year: number;
   };
   races: {
+    video: string;
     raceId: string;
     championshipId: string;
     raceName: string;
