@@ -68,7 +68,7 @@ describe('Drivers', () => {
     expect(result.elem).toBeInstanceOf(HTMLElement);
   });
 
-  it('should populate driver', () => {
+  it('should populate driver', async () => {
     // Arrange
     const data = {
       driver: {
@@ -86,7 +86,7 @@ describe('Drivers', () => {
       results: [],
     };
     // Act
-    const result = drivers['_populateDriver'](data as any);
+    const result = await (drivers as any)._populateDriver(data as any);
     // Assert
     expect(result.title).toBe('Lewis Hamilton');
     expect(result.elem).toBeInstanceOf(HTMLElement);

@@ -66,13 +66,12 @@
         }
     }
 
-    video {
+    iframe {
         height: 200px;
         width: auto;
         margin: 0 auto;
         margin-top: 30px;
         display: block;
-        border-radius: var(--radius);
     }
     
     dialog {

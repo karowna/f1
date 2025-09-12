@@ -73,7 +73,7 @@ export class Drivers implements PageClass {
   }
 
   private async _populateDriver(data: Driver): Promise<DriverTeamRaceContent> {
-    const { name, surname, nationality, birthday, number } = data.driver;
+    const { name, surname, nationality, birthday, number, points } = data.driver;
     const { teamName, teamNationality, teamId } = data.team;
     const imgName = this._handleDriverEdgeCases(name, surname);
     const driver = document.createElement('div');
@@ -88,7 +88,7 @@ export class Drivers implements PageClass {
       { Nationality: nationality },
       { 'Date of birth': birthday },
       { 'Car number': number },
-      { 'Championship points': 'N/A' }, // TODO: Update when API supports it
+      { 'Championship points': points ?? 'N/A' },
       { Team: `<a href="#teams/${teamId}">${teamName}</a>` },
       { 'Team nationality': teamNationality },
     ];

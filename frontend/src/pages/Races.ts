@@ -161,10 +161,12 @@ export class Races implements PageClass {
       ];
       appendListItems(details, allLi);
       container.append(details);
-      const video = document.createElement('video');
+      const video = document.createElement('iframe');
       container.append(video);
-      video.controls = true;
-      video.innerHTML = `<source src="${this._data?.video}" type="video/mp4">`;
+      video.title = 'YouTube video player';
+      video.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      video.allowFullscreen = true;
+      video.src = race.video ?? 'https://www.youtube.com/embed/l3ahPJy22_o'; // video placeholder
       this._populateComments(container, comments);
       const title = handleRaceNames(race.raceName);
       return { title, desc: '', elem: container };
