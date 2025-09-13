@@ -10,7 +10,7 @@ async function _setFavourite(type: 'driver' | 'team', id: string): Promise<void>
     const isFavourite = !favSpan.className;
     await fetchData.post(`/favourites/${type}/${id}/${fetchData.userId}`, { favourite: isFavourite }, true);
     favSpan.classList.toggle('favourite');
-    text.innerHTML = !isFavourite ? `One of your favourite ${type}s ` : `Click to set as favourite ${type} `;
+    text.innerHTML = isFavourite ? `One of your favourite ${type}s ` : `Click to set as favourite ${type} `;
   } catch (error) {
     console.error(`[setFavourite] - Error toggling favourite for ${type} ID ${id}:`, error);
     const parent = document.getElementById(`${type}s`)!;
