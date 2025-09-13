@@ -59,7 +59,7 @@ describe('Helpers unit tests', () => {
         body: JSON.stringify({ favourite: false }),
       });
       await new Promise(process.nextTick);
-      expect(document.getElementById('favourite-text').innerHTML).toBe('<span>One of your favourite drivers </span>');
+      expect(document.getElementById('favourite-text').innerHTML).toBe('<span>Click to set as favourite driver </span>');
     });
   });
 
